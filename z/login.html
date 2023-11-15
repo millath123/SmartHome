@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OTP Verification</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Add your custom CSS styles here */
+        .custom-form {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .custom-btn {
+            width: 100%;
+        }
+    </style>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row justify-content-center align-items-center" style="height: 100vh;">
+            <div class="col-lg-6 custom-form">
+                <h2 class="text-center">Registration</h2>
+                <form>
+                    <div class="form-group">
+                        <label for="email">Email address</label>
+                        <input type="email" class="form-control" id="email" placeholder="Enter your email" required>
+                    </div>
+                    <button type="button" class="btn btn-primary custom-btn" id="verificationButton">Send Verification Code</button>
+                    <!-- <div id="otpContainer" style="display: none;">
+                        <div class="form-group">
+                            <label for="otp">Enter OTP</label>
+                            <input type="text" class="form-control" id="otp" placeholder="Enter OTP" required>
+                        </div>
+                        <button type="button" class="btn btn-success custom-btn" id="registerButton">Register</button>
+                    </div> -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- <script>
+        // JavaScript to handle button clicks and show/hide OTP input and register button
+        document.getElementById('verificationButton').addEventListener('click', function () {
+            document.getElementById('otpContainer').style.display = 'block';
+        });
+
+        document.getElementById('registerButton').addEventListener('click', function () {
+            // Add your registration logic here
+            alert('Registration successful!');
+        });
+    </script> -->
+</body>
+</html>
