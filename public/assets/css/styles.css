@@ -51,6 +51,7 @@ article, aside, figcaption, figure, footer, header, hgroup, main, nav, section {
 
 body {
   margin: 0;
+  margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
   font-size: 1rem;
   font-weight: 400;
@@ -1150,27 +1151,27 @@ pre {
   .offset-lg-0 {
     margin-left: 0; }
   .offset-lg-1 {
-    margin-left: 8.33333%; }
+    margin-left: 0; }
   .offset-lg-2 {
-    margin-left: 16.66667%; }
+    margin-left:0; }
   .offset-lg-3 {
-    margin-left: 25%; }
+    margin-left: 0; }
   .offset-lg-4 {
-    margin-left: 33.33333%; }
+    margin-left: 0; }
   .offset-lg-5 {
-    margin-left: 41.66667%; }
+    margin-left:0; }
   .offset-lg-6 {
-    margin-left: 50%; }
+    margin-left: 0; }
   .offset-lg-7 {
-    margin-left: 58.33333%; }
+    margin-left:0; }
   .offset-lg-8 {
-    margin-left: 66.66667%; }
+    margin-left: 0; }
   .offset-lg-9 {
-    margin-left: 75%; }
+    margin-left: 0; }
   .offset-lg-10 {
-    margin-left: 83.33333%; }
+    margin-left: 0; }
   .offset-lg-11 {
-    margin-left: 91.66667%; } }
+    margin-left: 0; } }
 
 @media (min-width: 1200px) {
   .col-xl {
@@ -1309,27 +1310,27 @@ pre {
   .offset-xl-0 {
     margin-left: 0; }
   .offset-xl-1 {
-    margin-left: 8.33333%; }
+    margin-left:0; }
   .offset-xl-2 {
-    margin-left: 16.66667%; }
+    margin-left: 0; }
   .offset-xl-3 {
-    margin-left: 25%; }
+    margin-left: 0; }
   .offset-xl-4 {
-    margin-left: 33.33333%; }
+    margin-left:0; }
   .offset-xl-5 {
-    margin-left: 41.66667%; }
+    margin-left: 0; }
   .offset-xl-6 {
-    margin-left: 50%; }
+    margin-left: 0; }
   .offset-xl-7 {
-    margin-left: 58.33333%; }
+    margin-left: 0; }
   .offset-xl-8 {
-    margin-left: 66.66667%; }
+    margin-left:0; }
   .offset-xl-9 {
-    margin-left: 75%; }
+    margin-left: 0; }
   .offset-xl-10 {
-    margin-left: 83.33333%; }
+    margin-left: 0; }
   .offset-xl-11 {
-    margin-left: 91.66667%; } }
+    margin-left: 0; } }
 
 .table {
   width: 100%;
@@ -1865,7 +1866,7 @@ textarea.form-control {
   display: none;
   max-width: 100%;
   padding: 0.25rem 0.5rem;
-  margin-top: .1rem;
+  margin-top: 0;
   font-size: 0.875rem;
   line-height: 1.5;
   color: #fff;

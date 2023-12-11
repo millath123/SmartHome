@@ -6,6 +6,8 @@ const userSchema = new mongoose.Schema({
     token: String,
     fullName: String,
     phoneNumber: String,
+    googleId:String,
+    name:String,
 });
 
 const User = mongoose.model('User', userSchema);

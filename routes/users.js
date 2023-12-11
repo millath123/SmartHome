@@ -7,6 +7,10 @@ const bcrypt = require('bcrypt');
 const User = require('../model/usermodel');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const passport = require('../googleauth');
+const Product = require('../model/productmodel');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
+
 
 
 
@@ -47,7 +51,7 @@ router.post('/send-otp', async (req, res) => {
     <td class="es-stripe-html" align="center" style="padding:0;Margin:0"><table class="es-content-body" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px"><tr><td style="Margin:0;padding-top:40px;padding-right:20px;padding-bottom:40px;padding-left:20px;background-color:#182838" bgcolor="#182838" align="left"><table width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td valign="top" align="center" style="padding:0;Margin:0;width:560px"><table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr>
     <td align="center" style="Margin:0;padding-right:20px;padding-left:20px;padding-top:5px;padding-bottom:10px"><h1 style="Margin:0;font-family:'merriweather sans', 'helvetica neue', helvetica, arial, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:30px;font-style:normal;font-weight:normal;line-height:30px;color:#ffffff"><strong>Smart Home</strong> </h1></td></tr><tr><td align="center" style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-bottom:5px"><h3 style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:20px;font-style:normal;font-weight:normal;line-height:24px;color:#ffffff">Activate Your Account within 5 minutes</h3></td></tr><tr>
     <td align="center" style="Margin:0;padding-right:20px;padding-left:20px;padding-top:20px;padding-bottom:30px"><img class="adapt-img" alt="" width="520" src="https://cdt-timer.stripocdn.email/api/v1/images/vfA_ULwvzDb46O9iMam9D2IavjxmWv5v0S92vbrAoyw?l=1698474614997" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"></td></tr> <tr>
-    <td align="center" style="padding:10px;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ffffff;border-width:0px 0px 2px 0px;display:inline-block;border-radius:30px;width:auto"><a href="http://localhost:8080/users/active/${otp}" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:18px;padding:10px 20px 10px 20px;display:inline-block;background:#ffffff;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #31CB4B;border-color:#ffffff">Active Now</a></span></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body> </html>`
+    <td align="center" style="padding:10px;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ffffff;border-width:0px 0px 2px 0px;display:inline-block;border-radius:30px;width:auto"><a href="http://localhost:4001/users/active/${otp}" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:18px;padding:10px 20px 10px 20px;display:inline-block;background:#ffffff;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #31CB4B;border-color:#ffffff">Active Now</a></span></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body> </html>`
   };
 
   res.cookie('email', email, {
@@ -91,6 +95,7 @@ router.get('/active/:otp', async (req, res) => {
   });
 });
 
+
 //  set password and conform for reg
 
 router.get('/conformreg', (req, res) => {
@@ -126,17 +131,18 @@ router.post('/set-password', async (req, res) => {
 
     await newUser.save();
 
-    res.redirect('/user/login');
+    res.redirect('/users/login');
   } catch (err) {
     console.error(err);
     res.status(500).send('Error saving user to the database');
   }
 });
+             
 
-             ///// login page
+               ///// login page
 
 router.get('/login', (req, res) => {
-  res.render('userS/login');
+  res.render(path.join(__dirname, '../views/user/login'))
 });
 
 router.post('/login', async (req, res) => { 
@@ -146,25 +152,60 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).render(path.join(__dirname, '../views/users/conformreg'),{ invalidmail: 'Invalid Email Address' });
+      return res.status(401).render(path.join(__dirname, '../views/user/conformreg'),{ invalidmail: 'Invalid Email Address' });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(200).render(path.join(__dirname, '../views/users/conformreg'),{ notmatch: 'password not match' });
+      return res.status(200).render(path.join(__dirname, '../views/user/conformreg'),{ notmatch: 'password not match' });
     }
 
     const user_token = jwt.sign({userId :user._id }, process.env.JWT_SECRET)
     user.token = user_token
     await user.save()
     res.cookie('user_token', user_token, { httpOnly: true });
-    return res.redirect('/users');
+    return res.redirect('/users/mobileotp');
     res.json({ token });
 
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: 'Internal Server Error' });
   }
+});
+
+// //mobail OTP
+
+router.get('/mobileotp', (req, res) => {
+  res.render(path.join(__dirname, '../views/user/mobileOTP'))
+});
+
+/// google authentication
+
+router.get('/googleauth/google',
+  passport.authenticate('google', { scope: ['profile', 'email'] })
+);
+
+router.get('/googleauth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    console.log(req.user)
+    res.redirect('/users')
+}
+);
+ 
+///// productdetail
+router.get('/productdetail/:id',  async (req, res) => {
+
+try{
+  
+  const productId = req.params.id.split(':')[0]; 
+  const product = await Product.findById(productId);
+  res.render(path.join(__dirname,'../views/user/productDetail'),{product});
+}
+catch(err){
+  res.status(500).json({ error: 'Error fetching product details'+err });
+}
+
 });
 
 

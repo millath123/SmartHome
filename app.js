@@ -10,7 +10,24 @@ const adminrouter = require('./routes/admin');
 const mongos = require('./config/mongo');
 const cloudinary = require('./config/cloudinary');
 const productroutes = require('./routes/product');
-var app = express();
+const categoryroutes = require('./routes/category');
+const cartroutes = require('./routes/cart');
+
+
+const googleauthrouter = require('./routes/googleauth');
+const passport = require('passport');
+const session = require('express-session');
+
+const app = express();
+
+
+app.use(session({
+  secret: 'your-secret-key', // Replace with your own secret key
+  resave: false,
+  saveUninitialized: false
+}));
+
+
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -22,11 +39,16 @@ app.use(cookieParser());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, 'public')));                                                                                                                                                                                                                                                                                                                                  
 
+app.use(passport.initialize());
+app.use(passport.session());
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/admin', adminrouter);
 app.use('/mongo',mongos);
-app.use('/product',productroutes)
+app.use('/product',productroutes);
+app.use('/category',categoryroutes);
+app.use('/cart',cartroutes);
+
  
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
