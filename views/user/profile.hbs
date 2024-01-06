@@ -178,7 +178,7 @@
 
 
 
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -237,63 +237,48 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-  const showAdminModalBtn = document.getElementById('showAdminModalBtn');
+document.addEventListener('DOMContentLoaded', () => {
   const addAddressBtn = document.getElementById('addAddressBtn');
-
-  showAdminModalBtn.addEventListener('click', function () {
-    const adminEmailInput = document.getElementById('adEmail');
-    adminEmailInput.value = '{{admin.email}}'; // Replace with actual admin email
-
-    const myModal = new bootstrap.Modal(document.getElementById('adminModal'));
-    myModal.show();
+  const modal = new bootstrap.Modal(document.getElementById('adminModal')); 
+  
+  addAddressBtn.addEventListener('click', () => {
+    modal.show();
   });
-
-  addAddressBtn.addEventListener('click', function () {
-    const name = document.getElementById('name').value;
-    const mobileNo = document.getElementById('adEmail').value;
-    const email = document.getElementById('email').value;
-    const pinCode = document.getElementById('pincode').value;
-    const address = document.getElementById('address').value;
-    const locality = document.getElementById('locality').value;
-    const city = document.getElementById('city').value;
-    const state = document.getElementById('state').value;
-    const saveAddressAs = document.getElementById('home').value; // Adjust according to your logic
-
-    const formData = {
-      name,
-      mobileNo,
-      email,
-      pinCode,
-      address,
-      locality,
-      city,
-      state,
-      saveAddressAs,
-    };
-
-    fetch('/users/profile', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.json();
-      })
-      .then((data) => {
-       window
-      })
-      .catch((error) => {
-        console.error('Error adding address:', error);
-        // Handle errors if needed
+  
+  const submitAddressBtn = document.getElementById('submitAddressBtn');
+  submitAddressBtn.addEventListener('click', async () => {
+    try {
+      const name = document.getElementById('name').value;
+      const mobileNo = document.getElementById('adEmail').value;
+      const email = document.getElementById('email').value;
+      const pinCode = document.getElementById('pincode').value;
+      const address = document.getElementById('address').value;
+      const locality = document.getElementById('locality').value;
+      const city = document.getElementById('city').value;
+      const state = document.getElementById('state').value;
+      const saveAddressAs = document.getElementById('home').value; 
+  
+      const response = await axios.post('/profile', {
+        name,
+        mobileNo,
+        email,
+        pinCode,
+        address,
+        locality,
+        city,
+        state,
+        saveAddressAs,
       });
+  
+      console.log('Address added:', response.data);
+      window.location reloaded();
+      modal.hide(); 
+    } catch (error) {
+      console.error('Error adding address:', error);
+    }
   });
 });
+
 
     </script>
 

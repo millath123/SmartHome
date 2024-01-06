@@ -262,7 +262,6 @@ router.get('/profile', (req, res) => {
 
 
 
-
 router.post('/profile', async (req, res) => {
   const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;
 
@@ -286,34 +285,30 @@ router.post('/profile', async (req, res) => {
     });
 
     await userProfile.save();
-    res.status(201).json(userProfile); // Respond with the saved profile data
+    res.status(201).json(userProfile); 
   } catch (err) {
     console.error(err);
     res.status(500).send('Error saving user to the database');
   }
 });
 
-module.exports = router;
-
-
 // Fetch user profile details by email
-router.get('/profile/:email', async (req, res) => {
-  const userEmail = req.params.email;
+// router.get('/profile/:email', async (req, res) => {
+//   const userEmail = req.params.email;
 
-  try {
-    const userProfile = await Profile.findOne({ email: userEmail });
+//   try {
+//     const userProfile = await Profile.findOne({ email: userEmail });
 
-    if (!userProfile) {
-      return res.status(404).send('User profile not found');
-    }
+//     if (!userProfile) {
+//       return res.status(404).send('User profile not found');
+//     }
 
-    res.json(userProfile);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Error fetching user profile');
-  }
-});
-
+//     res.json(userProfile);
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Error fetching user profile');
+//   }
+// });
 
 module.exports = router;
 
