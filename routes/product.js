@@ -14,12 +14,13 @@ const storage = new CloudinaryStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+const upload = multer({ storage : storage });
 
 router.post('/upload', upload.array('images', 5), async (req, res) => {
   try {
     const files = req.files;
-    if (!files || files.length === 0) {
+   
+ if (!files || files.length === 0) {        
       return res.status(400).render(path.join(__dirname, '../views/admin/product'),{ noimg: 'ok' });
     }
     
@@ -27,6 +28,7 @@ router.post('/upload', upload.array('images', 5), async (req, res) => {
       cloudinary.uploader.upload(file.path)
     );
 
+    
     const results = await Promise.all(uploadPromises);
     const imageUrls = results.map((result) => result.secure_url);
 
@@ -62,7 +64,5 @@ router.post('/upload', upload.array('images', 5), async (req, res) => {
     res.status(500).json({ error: 'Error adding the product' });
   }
 });
-
-
 
 module.exports = router;

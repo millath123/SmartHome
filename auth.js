@@ -3,15 +3,14 @@ const adminmodel = require('./model/adminmodel');
 const isAuthenticated = async (req, res, next) => {
     try {
         if (!req.cookies.adminToken) {
-            return res.status(401).redirect('/login');
+            return res.status(401).redirect('/');
         }
 
-        const adminId = req.cookies.adminToken;
 
-        const admin = await adminmodel.findById(adminId);
+        const admin = await adminmodel.findById(req.cookies.adminToken);
 
         if (!admin) {
-            return res.status(401).redirect('/login');
+            return res.status(401).redirect('/');
         }
         req.admin = admin;
         next();

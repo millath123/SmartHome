@@ -10,14 +10,21 @@ require('dotenv').config();
 const passport = require('../googleauth');
 const Product = require('../model/productmodel');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-
-
-
+const Cart = require('../model/cartmodel');
+const Profile = require('../model/profile'); 
 
 router.use(express.json());
 
-router.get('/',(req, res) => {
-  res.render(path.join(__dirname, '../views/user/index'))
+router.get('/',async(req, res) => {
+  const userToken = req.cookies.user_token;
+  let user = await User.findOne({ token: userToken });
+  console.log(user);
+
+  const cartItems = await Cart.find({ userId: user._id });
+
+  const productIds = cartItems.map(item => item.productId);
+  const productData = await Product.find({ _id: productIds });
+  res.render(path.join(__dirname, '../views/user/index'),{ cart: cartItems, product: productData })
 });
 
 
@@ -51,7 +58,7 @@ router.post('/send-otp', async (req, res) => {
     <td class="es-stripe-html" align="center" style="padding:0;Margin:0"><table class="es-content-body" cellspacing="0" cellpadding="0" bgcolor="#ffffff" align="center" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px;background-color:#FFFFFF;width:600px"><tr><td style="Margin:0;padding-top:40px;padding-right:20px;padding-bottom:40px;padding-left:20px;background-color:#182838" bgcolor="#182838" align="left"><table width="100%" cellspacing="0" cellpadding="0" role="none" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr><td valign="top" align="center" style="padding:0;Margin:0;width:560px"><table width="100%" cellspacing="0" cellpadding="0" role="presentation" style="mso-table-lspace:0pt;mso-table-rspace:0pt;border-collapse:collapse;border-spacing:0px"><tr>
     <td align="center" style="Margin:0;padding-right:20px;padding-left:20px;padding-top:5px;padding-bottom:10px"><h1 style="Margin:0;font-family:'merriweather sans', 'helvetica neue', helvetica, arial, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:30px;font-style:normal;font-weight:normal;line-height:30px;color:#ffffff"><strong>Smart Home</strong> </h1></td></tr><tr><td align="center" style="padding:0;Margin:0;padding-right:20px;padding-left:20px;padding-bottom:5px"><h3 style="Margin:0;font-family:arial, 'helvetica neue', helvetica, sans-serif;mso-line-height-rule:exactly;letter-spacing:0;font-size:20px;font-style:normal;font-weight:normal;line-height:24px;color:#ffffff">Activate Your Account within 5 minutes</h3></td></tr><tr>
     <td align="center" style="Margin:0;padding-right:20px;padding-left:20px;padding-top:20px;padding-bottom:30px"><img class="adapt-img" alt="" width="520" src="https://cdt-timer.stripocdn.email/api/v1/images/vfA_ULwvzDb46O9iMam9D2IavjxmWv5v0S92vbrAoyw?l=1698474614997" style="display:block;font-size:14px;border:0;outline:none;text-decoration:none"></td></tr> <tr>
-    <td align="center" style="padding:10px;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ffffff;border-width:0px 0px 2px 0px;display:inline-block;border-radius:30px;width:auto"><a href="http://localhost:4001/users/active/${otp}" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:18px;padding:10px 20px 10px 20px;display:inline-block;background:#ffffff;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #31CB4B;border-color:#ffffff">Active Now</a></span></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body> </html>`
+    <td align="center" style="padding:10px;Margin:0"><span class="es-button-border" style="border-style:solid;border-color:#2CB543;background:#ffffff;border-width:0px 0px 2px 0px;display:inline-block;border-radius:30px;width:auto"><a href="http://localhost:5006/users/active/${otp}" class="es-button" target="_blank" style="mso-style-priority:100 !important;text-decoration:none !important;mso-line-height-rule:exactly;color:#333333;font-size:18px;padding:10px 20px 10px 20px;display:inline-block;background:#ffffff;border-radius:30px;font-family:arial, 'helvetica neue', helvetica, sans-serif;font-weight:normal;font-style:normal;line-height:22px;width:auto;text-align:center;letter-spacing:0;mso-padding-alt:0;mso-border-alt:10px solid #31CB4B;border-color:#ffffff">Active Now</a></span></td></tr></table></td></tr></table></td></tr></table></td></tr></table></td></tr></table></div></body> </html>`
   };
 
   res.cookie('email', email, {
@@ -136,8 +143,7 @@ router.post('/set-password', async (req, res) => {
     console.error(err);
     res.status(500).send('Error saving user to the database');
   }
-});
-             
+});         
 
                ///// login page
 
@@ -195,7 +201,6 @@ router.get('/googleauth/google/callback',
  
 ///// productdetail
 router.get('/productdetail/:id',  async (req, res) => {
-
 try{
   
   const productId = req.params.id.split(':')[0]; 
@@ -209,4 +214,106 @@ catch(err){
 });
 
 
+// profile
+
+router.get('/profile', (req, res) => {
+  res.render(path.join(__dirname, '../views/user/profile'))
+});
+
+
+// router.post('/profile', async (req, res) => {
+//   const name = req.cookies.name;
+//   const mobileNo = req.body.mobileNo;
+//   const email = req.body.email;
+//   const pinCode = req.body.pinCode;
+//   const address = req.body.address;
+//   const locality = req.body.locality;
+//   const state = req.body.state;
+//   const saveAddressAs = req.body.saveAddressAs;
+//   const city = req.body.city;
+
+
+//   try {
+
+//     const existingUser = await User.findOne({ email });
+
+//     if (existingUser) {
+//       return res.status(400).send('Email is already in use. Please use a different email.');
+//     }
+//     const UserDtails = new User({
+//       name,
+//       mobileNo,
+//       email,
+//       pinCode,
+//       address,
+//       locality,city,
+//       state,
+//       saveAddressAs,
+//     });
+
+//     await UserDtails.save();
+
+//     res.redirect('/users/profile');
+//   } catch (err) {
+//     console.error(err);
+//     res.status(500).send('Error saving user to the database');
+//   }
+// });
+
+
+
+
+router.post('/profile', async (req, res) => {
+  const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;
+
+  try {
+    const existingUser = await Profile.findOne({ email });
+
+    if (existingUser) {
+      return res.status(400).send('Email is already in use. Please use a different email.');
+    }
+
+    const userProfile = new Profile({
+      name,
+      mobileNo,
+      email,
+      pinCode,
+      address,
+      locality,
+      city,
+      state,
+      saveAddressAs,
+    });
+
+    await userProfile.save();
+    res.status(201).json(userProfile); // Respond with the saved profile data
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error saving user to the database');
+  }
+});
+
 module.exports = router;
+
+
+// Fetch user profile details by email
+router.get('/profile/:email', async (req, res) => {
+  const userEmail = req.params.email;
+
+  try {
+    const userProfile = await Profile.findOne({ email: userEmail });
+
+    if (!userProfile) {
+      return res.status(404).send('User profile not found');
+    }
+
+    res.json(userProfile);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Error fetching user profile');
+  }
+});
+
+
+module.exports = router;
+

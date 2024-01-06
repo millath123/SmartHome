@@ -2,15 +2,32 @@ var express = require('express');
 var router = express.Router();
 const path = require ("path");
 const Product = require('../model/productmodel');
+const Cart = require('../model/cartmodel');
+const User = require('../model/usermodel');
 
-router.get('/', function(req, res, next) {
+
+router.get('/',async function(req, res, next) {
+
   res.render(path.join(__dirname,'../views/admin/login'));
 });
 
 router.get('/product',async function (req, res, next) {
+  // const userToken = req.cookies.user_token;
+  // let user = await User.findOne({ token: userToken });
+  
+  // const cartItems = await Cart.find({ userId: user._id });
+
+  // const productIds = cartItems.map(item => item.productId);
+  // const productData = await Product.find({ _id: productIds });
   const product = await Product.find()
-    console.log(product);
-  res.render(path.join(__dirname,'../views/user/product'), {product});
+
+  res.render(path.join(__dirname,'../views/user/product'), {product });
+});
+
+
+router.get('/checkout',async function(req, res, next) {
+
+  res.render(path.join(__dirname,'../views/user/checkout'));
 });
 
 

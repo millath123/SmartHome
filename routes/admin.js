@@ -47,8 +47,7 @@ router.get('/', isAuthenticated, async function (req, res) {
 });
 
 /// admin login
-
-router.post('/login', async (req, res) => {
+router.post('/login',  async (req, res) => {
   const { email, password } = req.body;
 
   try {
@@ -86,7 +85,7 @@ router.get('/users', async (req, res) => {
 
 // Delete a user by ID
 
-router.delete('/users/:id', async (req, res) => {
+router.delete('/users/:id', isAuthenticated, async (req, res) => {
   const userId = req.params.id;
 
   try {
@@ -102,7 +101,7 @@ router.delete('/users/:id', async (req, res) => {
   }
 });
 
-router.put('/users/:id', async (req, res) => {
+router.put('/users/:id', isAuthenticated, async (req, res) => {
 
   const userId = req.params.id;
   const { fullName, phoneNumber, email } = req.body;
@@ -131,7 +130,7 @@ router.put('/users/:id', async (req, res) => {
 });
 
 // Product page 
-router.get('/product', async (req, res) => {
+router.get('/product', isAuthenticated, async (req, res) => {
   const product = await Product.find();
   res.render('admin/product', { product })
 }
@@ -159,17 +158,16 @@ const cloudinary = require('../config/cloudinary')
 const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Category = require('../model/categorymodel');
+const Cart = require('../model/cartmodel');
 
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
-    folder: 'uploads', 
+    folder: 'uploads',
     allowed_formats: ['jpg', 'png', 'jpeg'],
   },
 });
 const upload = multer({ storage: storage });
-
-
 
 router.get('/products/:id', async (req, res) => {
   try {
@@ -181,7 +179,7 @@ router.get('/products/:id', async (req, res) => {
     }
 
     res.render('editProductPage', { product });
-  }  catch (error) {
+  } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).send('Error fetching product details');
   }
@@ -202,12 +200,12 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
 
   try {
     const product = await Product.findById(productId);
-  
+
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
 
-    let imageUrls = product.productImage; 
+    let imageUrls = product.productImage;
     if (req.files && req.files.length > 0) {
       const uploadPromises = req.files.map((file) =>
         cloudinary.uploader.upload(file.path)
@@ -217,8 +215,9 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
       const newImageUrls = results.map((result) => result.secure_url);
       imageUrls = newImageUrls;
     }
-    
+
     // Update product details
+    product.productImage = imageUrls;
     product.productName = productName;
     product.productCategory = productCategory;
     product.productColor = productColor;
@@ -227,8 +226,8 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
     product.productQuantity = productQuantity;
     product.productDescription = productDescription;
     product.productConnectivity = productConnectivity;
-    product.productImage = imageUrls; // Update the images
-    
+    // product.productImage = imageUrls; 
+
     await product.save();
     res.json({ message: 'Product updated successfully' });
   } catch (error) {
@@ -238,8 +237,8 @@ router.put('/products/:id', upload.array('images', 5), async (req, res) => {
 });
 
 
-//// viwes
-router.get('/products/:id', async (req, res) => {
+//// Product viwes
+router.get('/products/:id', isAuthenticated, async (req, res) => {
   try {
     const productId = req.params.id;
     const product = await Product.findById(productId);
@@ -249,46 +248,44 @@ router.get('/products/:id', async (req, res) => {
     }
 
     res.render('editProductPage', { product });
-  }  catch (error) {
+  } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).send('Error fetching product details');
   }
 });
 
-
+//// mobileotp page
 router.get('/otp', (req, res) => {
   res.render(path.join(__dirname, '../views/user/mobileOTP'));
 });
 
-
-//// categry page
-
-router.get('/category', async (req, res) => {
-  const category = await Category.find();
-  res.render('admin/category', { category })
-}
-);
-router.get('/category', (req, res) => {
-  res.render(path.join(__dirname, '../views/admin/category'));
-});
-
-
-router.delete('/category/:id', async (req, res) => {
-  const categoryId = req.params.id;
-
+// //category edit
+router.get('/:categoryId/edit', async (req, res) => {
   try {
-    const deletedCategory = await Category.findByIdAndDelete(categoryId);
-
-    if (!deletedCategory) {
-      return res.status(404).json({ error: 'Category not found' });
-    }
-
-    res.status(200).json({ message: 'Category deleted successfully', deletedCategory });
+    const { categoryId } = req.params;
+    const category = await Category.findById(categoryId);
+    res.render('editCategory', { category });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error deleting category' });
+    console.error('Error fetching category for edit:', error);
+    res.status(500).json({ error: 'Error fetching category for edit' });
   }
 });
 
+router.put('/:categoryId', async (req, res) => {
+  try {
+    const { categoryId } = req.params;
+    const { categoryName, categoryImage } = req.body;
+
+    const updatedCategory = await Category.findByIdAndUpdate(categoryId, {
+      categoryName,
+      categoryImage,
+    }, { new: true });
+
+    res.json(updatedCategory);
+  } catch (error) {
+    console.error('Error updating category:', error);
+    res.status(500).json({ error: 'Error updating category' });
+  }
+});
 
 module.exports = router;        

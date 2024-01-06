@@ -677,19 +677,20 @@
 										</form>
 									</div>
 								</div>
+								{{#if cart}}
 								<div class="thb-secondary-item thb-quick-cart">
-									<div class="thb-quick-cart-inner">
-										<span class="thb-item-text">Cart</span>
-
-									</div>
-									<div class="thb-secondary-cart">
-										<div class="widget woocommerce widget_shopping_cart">
-											<div class="widget_shopping_cart_content"></div>
+									<a href="/cart">
+										<div class="thb-quick-cart-inner">
+											<span class="thb-item-text">Cart</span>
+											<div class="thb-item-icon-wrapper">
+												<span class="count thb-cart-count">{{this.cart.length}}
+													
+												</span>
+											</div>
 										</div>
-										<div class="thb-header-after-cart">
-											Free Tracked Shipping Worldwide on orders over ₹1000 </div>
-									</div>
+									</a>
 								</div>
+								{{/if}}
 							</div>
 						</div>
 					</div>
@@ -761,18 +762,16 @@
 								<div class="thb-products-per-page">
 									<span class="filter-bar-title">Show</span>
 									<a rel="nofollow"
-										href="https://smarthome.fuelthemes.net/shop?post_type=product&#038;ppp=9" class="per-page-variation
-						">
+										href="https://smarthome.fuelthemes.net/shop?post_type=product&#038;ppp=9"
+										class="per-page-variation">
 										9 </a>
 									<a rel="nofollow"
 										href="https://smarthome.fuelthemes.net/shop?post_type=product&#038;ppp=18"
-										class="per-page-variation
-						">
+										class="per-page-variation">
 										18 </a>
 									<a rel="nofollow"
 										href="https://smarthome.fuelthemes.net/shop?post_type=product&#038;ppp=27"
-										class="per-page-variation
-						">
+										class="per-page-variation">
 										27 </a>
 								</div>
 							</div>
@@ -924,6 +923,35 @@
 							<ul class="products columns-3">
 
 								{{!--**************************************************************************************************************************************************************************************************************************************************************************************************************************--}}
+
+								{{#if cartadd}}
+								<script>
+									let timerInterval;
+									Swal.fire({
+										title: "Auto close alert!",
+										html: "I will close in <b></b> milliseconds.",
+										timer: 2000,
+										timerProgressBar: true,
+										didOpen: () => {
+											Swal.showLoading();
+											const timer = Swal.getPopup().querySelector("b");
+											timerInterval = setInterval(() => {
+												timer.textContent = `${Swal.getTimerLeft()}`;
+											}, 100);
+										},
+										willClose: () => {
+											clearInterval(timerInterval);
+										}
+									}).then((result) => {
+										/* Read more about handling dismissals below */
+										if (result.dismiss === Swal.DismissReason.timer) {
+											console.log("I was closed by the timer");
+										}
+									});
+								</script>
+								{{/if}}
+
+
 								{{#each product}}
 
 								<li
@@ -936,7 +964,7 @@
 												<img width="550" height="550" src="{{this.productImage.[0]}}"
 													class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail jetpack-lazy-image"
 													alt="" decoding="async" loading="lazy"
-													data-lazy-srcset="{{this.productImage.[0]}}"
+													data-lazy-srcset="{{this.produtImage.[0]}}"
 													data-lazy-sizes="(max-width: 550px) 100vw, 550px"
 													data-lazy-src="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h5.png?resize=550%2C550&amp;ssl=1&amp;is-pending-load=1"
 													srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /></a>
@@ -948,18 +976,40 @@
 											</h2>
 
 											<span class="price"><del aria-hidden="true"><span
-														class="woocommerce-Price-amount amount"><bdi>{{this.productPrice}}</bdi></span></del>
+														class="woocommerce-Price-amount amount"><bdi>₹{{this.productPrice}}</bdi></span></del>
 												<ins><span
 														class="woocommerce-Price-amount amount"><bdi>₹{{this.productPrice}}</bdi></span></ins></span>
 											<a href="" data-quantity="1"
 												class="button wp-element-button product_type_external"
 												data-product_id="68" data-product_sku="53870"
-												aria-label="Buy on BestBuy" rel="nofollow">Add to cart</a>
+												aria-label="Buy on BestBuy" rel="nofollow"
+												onclick="addToCart(`{{this._id}}`)">Add to cart</a>
 										</div>
 									</div>
 								</li>
-
 								{{/each}}
+								<script>
+									function addToCart(productId) {
+										fetch('/cart/addToCart', {
+											method: 'POST',
+											headers: {
+												'Content-Type': 'application/json',
+											},
+											body: JSON.stringify({ productId: productId }),
+										})
+											.then(response => {
+												if (response.ok) {
+													console.log('Product added to cart!');
+												} else {
+													console.error('Failed to add product to cart.');
+												}
+											})
+											.catch(error => {
+												console.error('Error adding product to cart:', error);
+											});
+									}
+								</script>
+
 								{{!--******************************************************************************************************************************************************************************************************************************************************************************************************************************--}}
 
 							</ul>
@@ -1162,247 +1212,97 @@
 								href="https://smarthome.fuelthemes.net/shop/?filter_size=standalone">Standalone
 								Product</a> <span class="count">(6)</span></li>
 						<li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow"
-								href="https://smarthome.fuelthemes.net/shop/?filter_size=starter">Starter set</a> <span
-								class="count">(5)</span></li>
-					</ul>
-				</div>
-				<div id="woocommerce_price_filter-2" class="widget woocommerce widget_price_filter">
-					<div class="thb-widget-title">Filter by Price</div>
-					<form method="get" action="">
-						<div class="price_slider_wrapper">
-							<div class="price_slider" style="display:none;"></div>
-							<div class="price_slider_amount" data-step="10">
-								<label class="screen-reader-text" for="min_price">Min price</label>
-								<input type="text" id="min_price" name="min_price" value="30" data-min="30"
-									placeholder="Min price" />
-								<label class="screen-reader-text" for="max_price">Max price</label>
-								<input type="text" id="max_price" name="max_price" value="320" data-max="320"
-									placeholder="Max price" />
-								<button type="submit" class="button wp-element-button">Filter</button>
-								<div class="price_label" style="display:none;">
-									Price: <span class="from"></span> &mdash; <span class="to"></span>
-								</div>
-								<div class="clear"></div>
-							</div>
-						</div>
-					</form>
-
-				</div>
-			</div>
-		</div>
-		<!-- Start Mobile Menu -->
-		<nav id="mobile-menu" class="style1 side-panel" data-behaviour="thb-default">
-			<header class="side-panel-header">
-				<a href="#" class="thb-close" title="Close"><span><svg xmlns="http://www.w3.org/2000/svg" version="1.1"
-							x="0" y="0" width="12" height="12" viewBox="1.1 1.1 12 12"
-							enable-background="new 1.1 1.1 12 12" xml:space="preserve">
-							<path
-								d="M8.3 7.1l4.6-4.6c0.3-0.3 0.3-0.8 0-1.2 -0.3-0.3-0.8-0.3-1.2 0L7.1 5.9 2.5 1.3c-0.3-0.3-0.8-0.3-1.2 0 -0.3 0.3-0.3 0.8 0 1.2L5.9 7.1l-4.6 4.6c-0.3 0.3-0.3 0.8 0 1.2s0.8 0.3 1.2 0L7.1 8.3l4.6 4.6c0.3 0.3 0.8 0.3 1.2 0 0.3-0.3 0.3-0.8 0-1.2L8.3 7.1z" />
-						</svg></span> Close</a>
-			</header>
-			<div class="side-panel-inner">
-				<div class="mobile-menu-top">
-					<form role="search" method="get" class="woocommerce-product-search" action="">
-						<label class="screen-reader-text" for="woocommerce-product-search-field-999">Search for:</label>
-						<input type="search" id="woocommerce-product-search-field-999" class="search-field"
-							placeholder="Search products&hellip;" value="" name="s" />
-						<button type="submit" value="Search" class="wp-element-button">Search</button>
-						<input type="hidden" name="post_type" value="product" />
-					</form>
-					<ul id="menu-navigation-1" class="thb-mobile-menu">
-						<li
-							class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-home menu-item-14">
-							<a href="https://smarthome.fuelthemes.net/">Home</a>
-						</li>
-						<li
-							class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-has-children current-menu-item current_page_item menu-item-11">
-							<a href="https://smarthome.fuelthemes.net/shop/"><span></span>Shop</a>
-							<ul class="sub-menu">
-								<li
-									class=" menu-item menu-item-type-taxonomy menu-item-object-product_cat menu-item-228">
-									<a href="https://smarthome.fuelthemes.net/product-category/category-grid/">Category
-										Grid</a>
-								</li>
-								<li
-									class=" menu-item menu-item-type-custom menu-item-object-custom menu-item-has-children menu-item-217">
-									<a href="#"><span></span>Product Types</a>
-									<ul class="sub-menu">
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-218">
-											<a
-												href="https://smarthome.fuelthemes.net/product/apple-homepod-mini-space-gray/">Simple
-												Product</a>
-										</li>
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-219">
-											<a
-												href="https://smarthome.fuelthemes.net/product/nest-x-yale-lock-satin-nickel-with-google-nest-connect/">Variable
-												Product</a>
-										</li>
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-280">
-											<a
-												href="https://smarthome.fuelthemes.net/product/amazon-echo-dot-3rd-gen-smart-speaker-with-alexa/">External
-												Product</a>
-										</li>
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-216">
-											<a
-												href="https://smarthome.fuelthemes.net/product/google-nest-hello-smart-wi-fi-video-doorbell/">Grouped
-												Product</a>
-										</li>
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-222">
-											<a
-												href="https://smarthome.fuelthemes.net/product/amazon-echo-dot-3rd-gen-smart-speaker-with-alexa/">On
-												– Sale</a>
-										</li>
-										<li
-											class=" menu-item menu-item-type-post_type menu-item-object-product menu-item-221">
-											<a
-												href="https://smarthome.fuelthemes.net/product/ecobee3-lite-smart-thermostat-black/">Out
-												Of Stock</a>
-										</li>
-									</ul>
-								</li>
-							</ul>
-						</li>
-						<li class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-15"><a
-								href="https://smarthome.fuelthemes.net/blog/">Blog</a></li>
-						<li class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-142"><a
-								href="https://smarthome.fuelthemes.net/about/">About</a></li>
-						<li class=" menu-item menu-item-type-post_type menu-item-object-page menu-item-141"><a
-								href="https://smarthome.fuelthemes.net/contact/">Contact</a></li>
-					</ul>
-					<ul id="menu-secondary" class="thb-secondary-menu thb-secondary-item">
-						<li id="menu-item-203"
-							class="menu-item menu-item-type-post_type menu-item-object-page menu-item-203"><a
-								href="https://smarthome.fuelthemes.net/my-account/">Login</a></li>
-						<li id="menu-item-204"
-							class="menu-item menu-item-type-post_type menu-item-object-page menu-item-204"><a
-								href="https://smarthome.fuelthemes.net/my-account/">Register</a></li>
-					</ul>
-				</div>
-				<div class="mobile-menu-bottom">
-					<div class="menu-footer">
-						© 2021 <a href="" target="_blank" rel="noopener">Premium WordPress Themes</a>. All rights
-						reserved. </div>
-				</div>
-			</div>
-		</nav>
-		<!-- End Mobile Menu -->
-		<script
-			type="application/ld+json">{"@context":"https:\/\/schema.org\/","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"item":{"name":"Home","@id":"https:\/\/smarthome.fuelthemes.net"}},{"@type":"ListItem","position":2,"item":{"name":"Shop","@id":"https:\/\/smarthome.fuelthemes.net\/shop\/"}}]}</script>
-		<script type="text/javascript">
-			(function () {
-				var c = document.body.className;
-				c = c.replace(/woocommerce-no-js/, 'woocommerce-js');
-				document.body.className = c;
-			})();
-		</script>
-		<script type='text/javascript' src='https://c0.wp.com/p/jetpack/12.1.1/_inc/build/photon/photon.min.js'
-			id='jetpack-photon-js'></script>
-		<script type='text/javascript'
-			src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/jquery-blockui/jquery.blockUI.min.js'
-			id='jquery-blockui-js'></script>
-		<script type='text/javascript' id='wc-add-to-cart-js-extra'>
-			/* <![CDATA[ */
-			var wc_add_to_cart_params = { "ajax_url": "\/wp-admin\/admin-ajax.php", "wc_ajax_url": "\/?wc-ajax=%%endpoint%%", "i18n_view_cart": "View cart", "cart_url": "https:\/\/smarthome.fuelthemes.net\/cart\/", "is_cart": "", "cart_redirect_after_add": "no" };
-			/* ]]> */
-		</script>
-		<script type='text/javascript' src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/add-to-cart.min.js'
-			id='wc-add-to-cart-js'></script>
-		<script type='text/javascript' src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/js-cookie/js.cookie.min.js'
-			id='js-cookie-js'></script>
-		<script type='text/javascript' id='woocommerce-js-extra'>
-			/* <![CDATA[ */
-			var woocommerce_params = { "ajax_url": "\/wp-admin\/admin-ajax.php", "wc_ajax_url": "\/?wc-ajax=%%endpoint%%" };
-			/* ]]> */
-		</script>
-		<script type='text/javascript' src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/woocommerce.min.js'
+								href="https://smarthome.fuelthemes.net/shop/?filter_siwoocommerce/7.7.0/assets/js/frontend/woocommerce.min.js'
 			id='woocommerce-js'></script>
 		<script type='text/javascript' id='wc-cart-fragments-js-extra'>
 			/* <![CDATA[ */
-			var wc_cart_fragments_params = { "ajax_url": "\/wp-admin\/admin-ajax.php", "wc_ajax_url": "\/?wc-ajax=%%endpoint%%", "cart_hash_key": "wc_cart_hash_95ed86c957f4bfe26630312417b24237", "fragment_name": "wc_fragments_95ed86c957f4bfe26630312417b24237", "request_timeout": "5000" };
-			/* ]]> */
-		</script>
-		<script type='text/javascript'
-			src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/cart-fragments.min.js'
-			id='wc-cart-fragments-js'></script>
-		<script id="wc-cart-fragments-js-after" type="text/javascript">
-			jQuery('body').bind('wc_fragments_refreshed', function () {
-				var jetpackLazyImagesLoadEvent;
-				try {
-					jetpackLazyImagesLoadEvent = new Event('jetpack-lazy-images-load', {
-						bubbles: true,
-						cancelable: true
-					});
-				} catch (e) {
-					jetpackLazyImagesLoadEvent = document.createEvent('Event')
-					jetpackLazyImagesLoadEvent.initEvent('jetpack-lazy-images-load', true, true);
-				}
-				jQuery('body').get(0).dispatchEvent(jetpackLazyImagesLoadEvent);
-			});
+			var wc_cart_fragments_params = { " ajax_url": "\/wp-admin\/admin-ajax.php" , "wc_ajax_url"
+								: "\/?wc-ajax=%%endpoint%%" , "cart_hash_key"
+								: "wc_cart_hash_95ed86c957f4bfe26630312417b24237" , "fragment_name"
+								: "wc_fragments_95ed86c957f4bfe26630312417b24237" , "request_timeout" : "5000" }; /* ]]>
+								*/
+								</script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/cart-fragments.min.js'
+									id='wc-cart-fragments-js'></script>
+								<script id="wc-cart-fragments-js-after" type="text/javascript">
+									jQuery('body').bind('wc_fragments_refreshed', function () {
+										var jetpackLazyImagesLoadEvent;
+										try {
+											jetpackLazyImagesLoadEvent = new Event('jetpack-lazy-images-load', {
+												bubbles: true,
+												cancelable: true
+											});
+										} catch (e) {
+											jetpackLazyImagesLoadEvent = document.createEvent('Event')
+											jetpackLazyImagesLoadEvent.initEvent('jetpack-lazy-images-load', true, true);
+										}
+										jQuery('body').get(0).dispatchEvent(jetpackLazyImagesLoadEvent);
+									});
 
-		</script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/headroom.js?ver=1.0.0'
-			id='headroom-js'></script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/jquery.headroom.js?ver=1.0.0'
-			id='jquery-headroom-js'></script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/jquery.hoverIntent.js?ver=1.0.0'
-			id='jquery-hoverIntent-js'></script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/slick.js?ver=1.0.0'
-			id='slick-js'></script>
-		<script type='text/javascript' id='thb-app-js-extra'>
-			/* <![CDATA[ */
-			var themeajax = { "url": "https:\/\/smarthome.fuelthemes.net\/wp-admin\/admin-ajax.php", "l10n": { "adding_to_cart": "Adding to Cart", "added_to_cart": "Added To Cart", "has_been_added": "has been added to your cart.", "prev": "Prev", "next": "Next", "qty": "QTY" }, "settings": { "cart_url": "https:\/\/smarthome.fuelthemes.net\/cart\/", "is_cart": false, "is_checkout": false } };
-			/* ]]> */
-		</script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/app.min.js?ver=1.0.0'
-			id='thb-app-js'></script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-lazy-images/dist/intersection-observer.js?minify=false&#038;ver=83ec8aa758f883d6da14'
-			id='jetpack-lazy-images-polyfill-intersectionobserver-js'></script>
-		<script type='text/javascript' id='jetpack-lazy-images-js-extra'>
-			/* <![CDATA[ */
-			var jetpackLazyImagesL10n = { "loading_warning": "Images are still loading. Please cancel your print and try again." };
-			/* ]]> */
-		</script>
-		<script type='text/javascript'
-			src='https://smarthome.fuelthemes.net/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-lazy-images/dist/lazy-images.js?minify=false&#038;ver=2e29137590434abf5fbe'
-			id='jetpack-lazy-images-js'></script>
-		<script defer type='text/javascript' src='https://stats.wp.com/e-202348.js' id='jetpack-stats-js'></script>
-		<script id="jetpack-stats-js-after" type="text/javascript">
-			_stq = window._stq || [];
-			_stq.push(["view", { v: 'ext', blog: '189920065', post: '0', tz: '0', srv: 'smarthome.fuelthemes.net', j: '1:12.1.1' }]);
-			_stq.push(["clickTrackerInit", "189920065", "0"]);
-		</script>
-		<script type='text/javascript' src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/core.min.js'
-			id='jquery-ui-core-js'></script>
-		<script type='text/javascript' src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/mouse.min.js'
-			id='jquery-ui-mouse-js'></script>
-		<script type='text/javascript' src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/slider.min.js'
-			id='jquery-ui-slider-js'></script>
-		<script type='text/javascript'
-			src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/jquery-ui-touch-punch/jquery-ui-touch-punch.min.js'
-			id='wc-jquery-ui-touchpunch-js'></script>
-		<script type='text/javascript'
-			src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/accounting/accounting.min.js'
-			id='accounting-js'></script>
-		<script type='text/javascript' id='wc-price-slider-js-extra'>
-			/* <![CDATA[ */
-			var woocommerce_price_slider_params = { "currency_format_num_decimals": "0", "currency_format_symbol": "$", "currency_format_decimal_sep": ".", "currency_format_thousand_sep": ",", "currency_format": "%s%v" };
-			/* ]]> */
-		</script>
-		<script type='text/javascript'
-			src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/price-slider.min.js'
-			id='wc-price-slider-js'></script>
-	</div> <!-- End Wrapper -->
+								</script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/headroom.js?ver=1.0.0'
+									id='headroom-js'></script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/jquery.headroom.js?ver=1.0.0'
+									id='jquery-headroom-js'></script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/jquery.hoverIntent.js?ver=1.0.0'
+									id='jquery-hoverIntent-js'></script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/vendor/slick.js?ver=1.0.0'
+									id='slick-js'></script>
+								<script type='text/javascript' id='thb-app-js-extra'>
+									/* <![CDATA[ */
+									var themeajax = { "url": "https:\/\/smarthome.fuelthemes.net\/wp-admin\/admin-ajax.php", "l10n": { "adding_to_cart": "Adding to Cart", "added_to_cart": "Added To Cart", "has_been_added": "has been added to your cart.", "prev": "Prev", "next": "Next", "qty": "QTY" }, "settings": { "cart_url": "https:\/\/smarthome.fuelthemes.net\/cart\/", "is_cart": false, "is_checkout": false } };
+									/* ]]> */
+								</script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/themes/smart-home/assets/js/app.min.js?ver=1.0.0'
+									id='thb-app-js'></script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-lazy-images/dist/intersection-observer.js?minify=false&#038;ver=83ec8aa758f883d6da14'
+									id='jetpack-lazy-images-polyfill-intersectionobserver-js'></script>
+								<script type='text/javascript' id='jetpack-lazy-images-js-extra'>
+									/* <![CDATA[ */
+									var jetpackLazyImagesL10n = { "loading_warning": "Images are still loading. Please cancel your print and try again." };
+									/* ]]> */
+								</script>
+								<script type='text/javascript'
+									src='https://smarthome.fuelthemes.net/wp-content/plugins/jetpack/jetpack_vendor/automattic/jetpack-lazy-images/dist/lazy-images.js?minify=false&#038;ver=2e29137590434abf5fbe'
+									id='jetpack-lazy-images-js'></script>
+								<script defer type='text/javascript' src='https://stats.wp.com/e-202348.js'
+									id='jetpack-stats-js'></script>
+								<script id="jetpack-stats-js-after" type="text/javascript">
+									_stq = window._stq || [];
+									_stq.push(["view", { v: 'ext', blog: '189920065', post: '0', tz: '0', srv: 'smarthome.fuelthemes.net', j: '1:12.1.1' }]);
+									_stq.push(["clickTrackerInit", "189920065", "0"]);
+								</script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/core.min.js'
+									id='jquery-ui-core-js'></script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/mouse.min.js'
+									id='jquery-ui-mouse-js'></script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/c/6.3.2/wp-includes/js/jquery/ui/slider.min.js'
+									id='jquery-ui-slider-js'></script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/jquery-ui-touch-punch/jquery-ui-touch-punch.min.js'
+									id='wc-jquery-ui-touchpunch-js'></script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/accounting/accounting.min.js'
+									id='accounting-js'></script>
+								<script type='text/javascript' id='wc-price-slider-js-extra'>
+									/* <![CDATA[ */
+									var woocommerce_price_slider_params = { "currency_format_num_decimals": "0", "currency_format_symbol": "$", "currency_format_decimal_sep": ".", "currency_format_thousand_sep": ",", "currency_format": "%s%v" };
+									/* ]]> */
+								</script>
+								<script type='text/javascript'
+									src='https://c0.wp.com/p/woocommerce/7.7.0/assets/js/frontend/price-slider.min.js'
+									id='wc-price-slider-js'></script>
+				</div> <!-- End Wrapper -->
 </body>
 
 </html>

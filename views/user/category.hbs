@@ -155,13 +155,19 @@ body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: 
 </form>
 		</div>
 	</div>
+	
 		<div class="thb-secondary-item thb-quick-cart">
-		<div class="thb-quick-cart-inner">
+		<a href="/cart">
+			<div class="thb-quick-cart-inner">
 			<span class="thb-item-text">Cart</span>
+			   <div class="thb-item-icon-wrapper">
+									<span class="count thb-cart-count">{{cart.length}}</span>
+							</div>
 			<div class="thb-item-icon-wrapper">
-									<span class="count thb-cart-count">0</span>
+									
 							</div>
 		</div>
+		</a>
 					<div class="thb-secondary-cart">
 				<div class="widget woocommerce widget_shopping_cart"><div class="widget_shopping_cart_content"></div></div>						<div class="thb-header-after-cart">
 			Free Tracked Shipping Worldwide on orders over $100		</div>
@@ -258,7 +264,7 @@ body{--wp--preset--color--black: #000000;--wp--preset--color--cyan-bluish-gray: 
 <li class="cat-item cat-item-27"><a href="https://smarthome.fuelthemes.net/product-category/lighting/">Lighting</a></li>
 <li class="cat-item cat-item-26"><a href="https://smarthome.fuelthemes.net/product-category/security/">Security</a></li>
 </ul></div><div id="woocommerce_layered_nav-3" class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav"><div class="thb-widget-title">Filter by Color</div><ul class="woocommerce-widget-layered-nav-list"><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_color=black">Black</a> <span class="count">(1)</span></li><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_color=blue">Blue</a> <span class="count">(2)</span></li><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_color=gray">Gray</a> <span class="count">(1)</span></li><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_color=orange">Orange</a> <span class="count">(1)</span></li></ul></div><div id="woocommerce_layered_nav-4" class="widget woocommerce widget_layered_nav woocommerce-widget-layered-nav"><div class="thb-widget-title">Filter by Type</div><ul class="woocommerce-widget-layered-nav-list"><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_size=ext">Extension</a> <span class="count">(1)</span></li><li class="woocommerce-widget-layered-nav-list__item wc-layered-nav-term "><a rel="nofollow" href="https://smarthome.fuelthemes.net/product-category/category-grid/?filter_size=standalone">Standalone Product</a> <span class="count">(1)</span></li></ul></div><div id="woocommerce_price_filter-2" class="widget woocommerce widget_price_filter"><div class="thb-widget-title">Filter by Price</div>
-<form method="get" action="https://smarthome.fuelthemes.net/product-category/category-grid/">
+<form method="get" action="">
 	<div class="price_slider_wrapper">
 		<div class="price_slider" style="display:none;"></div>
 		<div class="price_slider_amount" data-step="10">

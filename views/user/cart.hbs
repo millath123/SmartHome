@@ -152,8 +152,8 @@
         }
 
         .btn {
-            background-color: #000;
-            border-color: #000;
+            background-color: blue;
+            - border-color: blue;
             color: white;
             width: 100%;
             font-size: 0.7rem;
@@ -191,8 +191,35 @@
             background-position-x: 95%;
             background-position-y: center;
         }
-    </style>
 
+
+        .qty {
+            display: flex;
+            align-items: center;
+            width: 120px;
+            border: none;
+            padding: 5px;
+            border-radius: 5px;
+        }
+
+        .decrement,
+        .increment {
+            display: inline-block;
+            text-decoration: none;
+            padding: 3px 8px;
+            margin: 0 5px;
+            background-color: #f0f0f0;
+            color: #333;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .quantity {
+            font-weight: bold;
+            font-size: 1.2em;
+            margin: 0 10px;
+        }
+    </style>
 
 </head>
 
@@ -201,82 +228,172 @@
         <div class="row">
             <div class="col-md-8 cart">
                 <div class="title">
+                    <div class="col">
+                        <h4><b>Shopping Cart</b></h4>
+                    </div>
+                    {{#each cart}}
                     <div class="row">
-                        <div class="col">
-                            <h4><b>Shopping Cart</b></h4>
-                        </div>
-                        <div class="col align-self-center text-right text-muted">3 items</div>
-                    </div>
+                        <div class="col align-self-center text-right text-muted"></div>
+                    </div>{{/each}}
                 </div>
+
+                {{#each product}}
                 <div class="row border-top border-bottom">
                     <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src=""></div>
+                        <div class="col-2"><img class="img-fluid" src="{{this.productImage.[0]}}"></div>
                         <div class="col">
-                            <div class="row text-muted"></div>
-                            <div class="row">Cotton T-shirt</div>
+                            <div class="row text-muted">{{this.productCategory}}</div>
+                            <div class="row">{{this.productName}}</div>
                         </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
+                        <div class="qty">
+                            <a href="#" class="decrement">-</a>
+                            <span class="quantity">1</span>
+                            <a href="#" class="increment">+</a>
                         </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
+
+                        <div class="col">₹<span class="product-price">{{this.productPrice}}</span>
+                            <span class="close">
+                                <button class="btn-delete" data-productId="{{this._id}}">&#10005;</button>
+                            </span>
+                        </div>
+
+                        <p class="deletcart" style="display: none;">{{this._id}}</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/ba3tvGm.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
+
+                {{/each}}
+
+                <div class="back-to-shop"><a href="/product">&leftarrow;</a><span class="text-muted">Back to shop</span>
                 </div>
-                <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="https://i.imgur.com/pHQ3xT3.jpg"></div>
-                        <div class="col">
-                            <div class="row text-muted">Shirt</div>
-                            <div class="row">Cotton T-shirt</div>
-                        </div>
-                        <div class="col">
-                            <a href="#">-</a><a href="#" class="border">1</a><a href="#">+</a>
-                        </div>
-                        <div class="col">&euro; 44.00 <span class="close">&#10005;</span></div>
-                    </div>
-                </div>
-                <div class="back-to-shop"><a href="#">&leftarrow;</a><span class="text-muted">Back to shop</span></div>
             </div>
             <div class="col-md-4 summary">
                 <div>
                     <h5><b>Summary</b></h5>
                 </div>
                 <hr>
+
                 <div class="row">
-                    <div class="col" style="padding-left:0;">ITEMS 3</div>
-                    <div class="col text-right">&euro; 132.00</div>
+                    <div class="col" style="padding-left:0;" id="totalItems">ITEMS 3</div>
+                    {{!-- <div class="col text-right" id="totalSum"></div> --}}
                 </div>
-                <form>
+                {{!-- <form>
                     <p>SHIPPING</p>
                     <select>
-                        <option class="text-muted">Standard-Delivery- &euro;5.00</option>
+                        <option class="text-muted">Standard-Delivery- </option>
                     </select>
                     <p>GIVE CODE</p>
                     <input id="code" placeholder="Enter your code">
-                </form>
+                </form> --}}
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
-                    <div class="col text-right">&euro; 137.00</div>
+                    <div class="col text-right" id="totalSum"></div>
                 </div>
-                <button class="btn">CHECKOUT</button>
+                <button id="checkout" class="btn">CHECKOUT</button>
             </div>
         </div>
-
     </div>
 
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const deleteButtons = document.querySelectorAll('.btn-delete');
+
+            deleteButtons.forEach((button, index) => {
+                button.addEventListener('click', async (event) => {
+                    const productId = document.getElementsByClassName("deletcart")[index].textContent;
+
+                    try {
+                        const response = await fetch(`/cart/delete/${productId}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (response.ok) {
+
+                            event.target.closest('.border-top').remove();
+                        } else {
+                            console.error('Failed to delete product from cart');
+                        }
+                    } catch (error) {
+                        console.error('Error deleting product:', error);
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const qtyContainers = document.querySelectorAll('.qty');
+
+            qtyContainers.forEach(container => {
+
+                const decrementButton = container.querySelector('.decrement');
+                const incrementButton = container.querySelector('.increment');
+                const quantityElement = container.querySelector('.quantity');
+                const productPriceElement = container.closest('.row').querySelector('.product-price');
+
+                const originalPrice = parseFloat(productPriceElement.textContent);
+
+                incrementButton.addEventListener('click', () => {
+                    let quantity = parseInt(quantityElement.textContent);
+                    if (quantity < 10) {
+                        quantity++;
+                        quantityElement.textContent = quantity;
+
+                        const totalPrice = originalPrice * quantity;
+                        productPriceElement.textContent = totalPrice;
+                    }
+                });
+
+                decrementButton.addEventListener('click', () => {
+                    let quantity = parseInt(quantityElement.textContent);
+                    if (quantity > 1) {
+                        quantity--;
+                        quantityElement.textContent = quantity;
+
+                        const totalPrice = originalPrice * quantity;
+                        productPriceElement.textContent = totalPrice;
+                    }
+                });
+            });
+        });
+    </script>
+
+
+    {{!-- sum of the product price --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const updateTotalSum = () => {
+                const productPriceElements = document.querySelectorAll('.product-price');
+                let totalSum = 0;
+
+                productPriceElements.forEach((priceElement) => {
+                    const priceText = priceElement.textContent.trim();
+                    const price = parseFloat(priceText);
+                    totalSum += price;
+                });
+
+                const totalSumElement = document.getElementById('totalSum');
+                totalSumElement.textContent = `₹${totalSum.toFixed(2)}`;
+            };
+            updateTotalSum();
+            document.addEventListener('click', updateTotalSum);
+        });
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const updateTotalItems = () => {
+                const cartItems = document.querySelectorAll('.row.main');
+                const totalItemsElement = document.getElementById('totalItems');
+
+                const totalItems = cartItems.length;
+                totalItemsElement.textContent = `ITEMS ${totalItems}`;
+            };
+
+            updateTotalItems();
+            document.addEventListener('click', updateTotalItems);
+        });
+    </script>
 
 </body>
-
 </html>

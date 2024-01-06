@@ -151,13 +151,13 @@
                     <a href="/admin/product"><span class="fa fa-th mr-3"></span>PRODUCTS</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-trophy mr-3"></span>
+                    <a href=""><span class="fa fa-trophy mr-3"></span>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-cog mr-3"></span> Settings</a>
+                    <a href=""><span class="fa fa-cog mr-3"></span> Settings</a>
                 </li>
                 <li>
-                    <a href="#"><span class="fa fa-support mr-3"></span> Support</a>
+                    <a href=""><span class="fa fa-support mr-3"></span> Support</a>
                 </li>
                 <li>
                     <a href="/admin/logout"><span class="fa fa-sign-out mr-3"></span> Sign Out</a>
@@ -198,7 +198,6 @@
                                     onclick="openEditCategoryModal('{{this.id}}','{{this.categoryName}}','{{this.categoryImage}}')">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
                                 </button>
-
 
                                 <button class="btn custom-delete-button"
                                     onclick="deleteCategory('{{this.id}}', this.parentNode.parentNode)">
@@ -329,9 +328,6 @@
             </div>
         </div>
 
-        
-
-
         <script>
             function deleteCategory(categoryId, categoryRow) {
                 fetch(`/admin/category/${categoryId}`, {
@@ -353,7 +349,6 @@
             }
         </script>
 
-
         <script>
             document.addEventListener("DOMContentLoaded", function () {
                 var indexingElements = document.querySelectorAll(".indexing");
@@ -362,6 +357,54 @@
                     element.textContent = index + 1;
                 });
             });
+        </script>
+
+<!-- Edit Category Modal -->
+<div class="modal fade" id="editCategoryModal" tabindex="-1" aria-labelledby="editCategoryModalLabel"
+    aria-hidden="true">
+    <!-- ... Other modal content ... -->
+    <div class="modal-body">
+        <form id="editCategoryForm">
+            <input type="hidden" id="editCategoryId">
+            <label for="editCategoryName" class="form-label">Category Name</label>
+            <input type="text" class="form-control" id="editCategoryName" name="editCategoryName">
+            <!-- Additional input fields for editing category information -->
+        </form>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" onclick="submitEditCategory()">Save changes</button>
+    </div>
+</div>
+
+
+
+
+        <script>
+            function openEditCategoryModal(categoryId, categoryName, categoryImage) {
+    document.getElementById('editCategoryId').value = categoryId;
+    document.getElementById('editCategoryName').value = categoryName;
+
+    var modal = new bootstrap.Modal(document.getElementById('editCategoryModal'));
+    modal.show();
+}
+
+function submitEditCategory() {
+    const categoryId = document.getElementById('editCategoryId').value;
+    const categoryName = document.getElementById('editCategoryName').value;
+
+    axios.put(`/admin/category/${categoryId}`, {
+        categoryName,
+    })
+    .then(response => {
+        console.log('Category updated successfully:', response.data);
+        window.location.href = '/admin/category'; 
+    })
+    .catch(error => {
+        console.error('Error updating category:', error);
+    });
+}
+
         </script>
 
         <script src="../assets/js/jquery.min.js"></script>

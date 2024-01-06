@@ -12,6 +12,8 @@ const cloudinary = require('./config/cloudinary');
 const productroutes = require('./routes/product');
 const categoryroutes = require('./routes/category');
 const cartroutes = require('./routes/cart');
+// const profileroutes = require('./routes/profile');
+
 
 
 const googleauthrouter = require('./routes/googleauth');
@@ -48,6 +50,9 @@ app.use('/mongo',mongos);
 app.use('/product',productroutes);
 app.use('/category',categoryroutes);
 app.use('/cart',cartroutes);
+// app.use('/profile',profileroutes);
+
+
 
  
 // catch 404 and forward to error handler

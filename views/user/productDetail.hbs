@@ -468,6 +468,405 @@
             line-height: 1.6;
         }
     </style>
+    <style>
+        .picZoomer {
+            position: relative;
+            /*margin-left: 40px;
+    padding: 15px;*/
+        }
+
+        .picZoomer-pic-wp {
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+
+        .picZoomer-pic-wp:hover .picZoomer-cursor {
+            display: block;
+        }
+
+        .picZoomer-zoom-pic {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .picZoomer-pic {
+            /*width: 100%;
+	height: 100%;*/
+        }
+
+        .picZoomer-zoom-wp {
+            display: none;
+            position: absolute;
+            z-index: 999;
+            overflow: hidden;
+            border: 1px solid #eee;
+            height: 460px;
+            margin-top: -19px;
+        }
+
+        .picZoomer-cursor {
+            display: none;
+            cursor: crosshair;
+            width: 100px;
+            height: 100px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            border-radius: 50%;
+            border: 1px solid #eee;
+            background-color: rgba(0, 0, 0, .1);
+        }
+
+        .picZoomCursor-ico {
+            width: 23px;
+            height: 23px;
+            position: absolute;
+            top: 40px;
+            left: 40px;
+            background: url(images/zoom-ico.png) left top no-repeat;
+        }
+
+        .my_img {
+            vertical-align: middle;
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            margin: auto;
+            height: 100%;
+        }
+
+        .piclist li {
+            display: inline-block;
+            width: 90px;
+            height: 114px;
+            border: 1px solid #eee;
+        }
+
+        .piclist li img {
+            width: 97%;
+            height: auto;
+        }
+
+        /* custom style */
+        .picZoomer-pic-wp,
+        .picZoomer-zoom-wp {
+            border: 1px solid #eee;
+        }
+
+
+
+        .section-bg {
+            background-color: white;
+        }
+
+        section {
+            padding: 60px 0;
+        }
+
+        .row-sm .col-md-6 {
+            padding-left: 5px;
+            padding-right: 5px;
+        }
+
+        /*===pic-Zoom===*/
+        ._boxzoom .zoom-thumb {
+            width: 90px;
+            display: inline-block;
+            vertical-align: top;
+            margin-top: 0px;
+            margin-left: 0px;
+        }
+
+        ._boxzoom .zoom-thumb ul.piclist {
+            padding-left: 0px;
+            top: 0px;
+        }
+
+        ._boxzoom ._product-images {
+            width: 80%;
+            display: inline-block;
+        }
+
+        ._boxzoom ._product-images .picZoomer {
+            width: 100%;
+        }
+
+        ._boxzoom ._product-images .picZoomer .picZoomer-pic-wp img {
+            left: 0px;
+        }
+
+        ._boxzoom ._product-images .picZoomer img.my_img {
+            width: 100%;
+        }
+
+        .piclist li img {
+            height: 100px;
+            object-fit: cover;
+            margin-right: 50px;
+        }
+
+        /*======products-details=====*/
+        ._product-detail-content {
+            background: #fff;
+            padding: 15px;
+            border: 1px solid lightgray;
+        }
+
+        ._product-detail-content p._p-name {
+            color: black;
+            font-size: 20px;
+            border-bottom: 1px solid lightgray;
+            padding-bottom: 12px;
+        }
+
+        .p-list span {
+            margin-right: 15px;
+        }
+
+        .p-list span.price {
+            font-size: 25px;
+            color: #318234;
+        }
+
+        ._p-qty>span {
+            color: black;
+            margin-right: 15px;
+            font-weight: 500;
+        }
+
+        ._p-qty .value-button {
+            display: inline-flex;
+            border: 0px solid #ddd;
+            margin: 0px;
+            width: 30px;
+            height: 35px;
+            justify-content: center;
+            align-items: center;
+            background: gainsboro;
+            -webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            color: #fff;
+        }
+
+        ._p-qty .value-button {
+            border: 0px solid gainsboro;
+            height: 35px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        ._p-qty input#number {
+            text-align: center;
+            border: none;
+            border-top: 1px solid blue;
+            border-bottom: 1px solid blue;
+            margin: 0px;
+            width: 50px;
+            height: 35px;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        ._p-add-cart {
+            margin-left: 0px;
+            margin-bottom: 15px;
+        }
+
+        .p-list {
+            margin-bottom: 10px;
+        }
+
+        ._p-features>span {
+            display: block;
+            font-size: 16px;
+            color: #000;
+            font-weight: 500;
+        }
+
+        ._p-add-cart .buy-btn {
+            background-color: blue;
+            color: #fff;
+        }
+
+        ._p-add-cart .btn {
+            text-transform: capitalize;
+            padding: 6px 20px;
+            /* width: 200px; */
+            border-radius: 52px;
+        }
+
+        ._p-add-cart .btn {
+            margin: 0px 8px;
+        }
+
+        /*=========Recent-post==========*/
+        .title_bx h3.title {
+            font-size: 22px;
+            text-transform: capitalize;
+            position: relative;
+            color: blue;
+            font-weight: 700;
+            line-height: 1.2em;
+        }
+
+        .title_bx h3.title:before {
+            content: "";
+            height: 2px;
+            width: 20%;
+            position: absolute;
+            left: 0px;
+            z-index: 1;
+            top: 40px;
+            background-color: blue;
+        }
+
+        .title_bx h3.title:after {
+            content: "";
+            height: 2px;
+            width: 100%;
+            position: absolute;
+            left: 0px;
+            top: 40px;
+            background-color: blue;
+        }
+
+        .common_wd .owl-nav .owl-prev,
+        .common_wd .owl-nav .owl-next {
+            background-color: blue !important;
+            display: block;
+            height: 30px;
+            width: 30px;
+            text-align: center;
+            border-radius: 0px !important;
+        }
+
+        .owl-nav .owl-next {
+            right: -10px;
+        }
+
+        .owl-nav .owl-prev,
+        .owl-nav .owl-next {
+            top: 50%;
+            position: absolute;
+        }
+
+        .common_wd .owl-nav .owl-prev i,
+        .common_wd .owl-nav .owl-next i {
+            color: #fff;
+            font-size: 14px !important;
+            position: relative;
+            top: -1px;
+        }
+
+        .common_wd .owl-nav {
+            position: absolute;
+            top: -21%;
+            right: 4px;
+            width: 65px;
+        }
+
+        .owl-nav .owl-prev i,
+        .owl-nav .owl-next i {
+            left: 0px;
+        }
+
+        ._p-qty .decrease_ {
+            position: relative;
+            right: -5px;
+            top: 3px;
+        }
+
+        ._p-qty .increase_ {
+            position: relative;
+            top: 3px;
+            left: -5px;
+        }
+
+        /*========box========*/
+        .sq_box {
+            padding-bottom: 5px;
+            border-bottom: solid 2px blue;
+            background-color: #fff;
+            text-align: center;
+            padding: 15px 10px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+        }
+
+        .item .sq_box span.wishlist {
+            right: 5px !important;
+        }
+
+        .sq_box span.wishlist {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+        }
+
+        .sq_box span {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0px 10px;
+        }
+
+        .sq_box span.wishlist i {
+            color: #adb5bd;
+            font-size: 20px;
+        }
+
+        .sq_box h4 {
+            font-size: 18px;
+            text-align: center;
+            font-weight: 500;
+            color: #343a40;
+            margin-top: 10px;
+            margin-bottom: 10px !important;
+        }
+
+        .sq_box .price-box {
+            margin-bottom: 15px !important;
+        }
+
+        .sq_box .btn {
+            border-radius: 50px;
+            padding: 5px 13px;
+            font-size: 15px;
+            color: #fff;
+            background-color: blue;
+            font-weight: 600;
+        }
+
+        .sq_box .price-box span.price {
+            text-decoration: line-through;
+            color: #6c757d;
+        }
+
+        .sq_box span {
+            font-size: 14px;
+            font-weight: 600;
+            margin: 0px 10px;
+        }
+
+        .sq_box .price-box span.offer-price {
+            color: blue;
+        }
+
+        .sq_box img {
+            object-fit: cover;
+            height: 150px !important;
+            margin-top: 20px;
+        }
+
+        .sq_box span.wishlist i:hover {
+            color: blue;
+        }
+    </style>
     <link rel='stylesheet' id='photoswipe-css'
         href='https://c0.wp.com/p/woocommerce/7.7.0/assets/css/photoswipe/photoswipe.min.css' type='text/css'
         media='all' />
@@ -704,18 +1103,23 @@
                                     </div>
                                 </div>
                                 <div class="thb-secondary-item thb-quick-cart">
-                                    <div class="thb-quick-cart-inner">
-                                        <span class="thb-item-text">Cart</span>
-                                        <div class="thb-item-icon-wrapper">
+                                    <a href="/cart">
+                                        <div class="thb-quick-cart-inner">
+                                            <span class="thb-item-text">Cart</span>
+                                            <div class="thb-item-icon-wrapper">
+                                                <span class="count thb-cart-count">0</span>
+                                            </div>
+                                            <div class="thb-item-icon-wrapper">
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="thb-secondary-cart">
+                                    </a>
+                                    {{!-- <div class="thb-secondary-cart">
                                         <div class="widget woocommerce widget_shopping_cart">
                                             <div class="widget_shopping_cart_content"></div>
                                         </div>
                                         <div class="thb-header-after-cart">
                                             Free Tracked Shipping Worldwide on orders over $100 </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>
@@ -766,24 +1170,241 @@
                                 class="product type-product post-53 status-publish first instock product_cat-security product_tag-nest product_tag-steel product_tag-thermostat has-post-thumbnail taxable shipping-taxable product-type-grouped thb-product-detail">
 
 
-{{!-- ********************************************************************************************************************************************************************************************************************************************************************************************************************* --}}
+                                <!-- CSS -->
+                                <link rel="stylesheet"
+                                    href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+                                <!-- JavaScript and jQuery (required for Bootstrap JavaScript plugins) -->
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                <script
+                                    src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                                <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+
+                                <!-- Owl Carousel CSS -->
+                                <link rel="stylesheet"
+                                    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+                                <link rel="stylesheet"
+                                    href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+
+                                <!-- Owl Carousel JavaScript -->
+                                <script
+                                    src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+                                {{!--
+                                *********************************************************************************************************************************************************************************************************************************************************************************************************************
+                                --}}
                                 {{#if product}}
-                                <div class="row thb-product-main-row">
-                                    <div class="small-12 medium-6 large-7 columns product-gallery-column">
-                                        <div class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
-                                            data-columns="4" style="opacity: 0; transition: opacity .25s ease-in-out;">
-                                            <figure class="woocommerce-product-gallery__wrapper">
-                                                <div data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2.png?fit=124%2C124&#038;ssl=1"
-                                                    data-thumb-alt="" class="woocommerce-product-gallery__image"><a
-                                                        href="{{product.productImage.[0]}}"><img
-                                                            width="550" height="550"
-                                                            src="{{product.productImage.[0]}}"
-                                                            class="wp-post-image jetpack-lazy-image" alt=""
-                                                            decoding="async" title="h2" data-caption=""
-                                                            data-src="{{product.productImage.[0]}}"
-                                                            data-large_image="{{product.productImage.[0]}}"
+
+                                <section id="services" class="services section-bg">
+                                    <div class="container-fluid">
+                                        {{!-- <div class="col-sm-12 text-center mb-4"> --}}
+                                            {{!-- <a class="btn btn-primary" target="_blank"
+                                                href="http://paypal.me/skd1996"> Donate Now <i
+                                                    class="fa fa-dollar"></i></a> --}}
+                                            {{!-- </div> --}}
+                                        <div class="row row-sm">
+                                            <div class="col-md-6 _boxzoom">
+                                                <div class="zoom-thumb">
+                                                    <ul class="piclist">
+                                                        <li><img src="{{product.productImage.[0]}}" alt=""></li>
+                                                        <li><img src="{{product.productImage.[1]}}" alt=""></li>
+                                                        <li><img src="{{product.productImage.[2]}}" alt=""></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="_product-images">
+                                                    <div class="picZoomer">
+                                                        <img class="my_img" src="{{product.productImage.[0]}}" alt="">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="_product-detail-content">
+                                                    <p class="_p-name"> {{product.productName}} </p>
+                                                    <div class="_p-price-box">
+                                                        <div class="p-list">
+                                                            <span> M.R.P. : <i class="fa fa-inr"></i> <del> 60005 </del>
+                                                            </span>
+                                                            <span class="price"> Rs. {{product.productPrice}} </span>
+                                                        </div>
+                                                        <div class="_p-add-cart">
+                                                            <div class="_p-qty">
+                                                                <span>Add Quantity</span>
+                                                                <div class="value-button decrease_" id=""
+                                                                    value="Decrease Value">-</div>
+                                                                <input type="number" name="qty" id="number" value="1" />
+                                                                <div class="value-button increase_" id=""
+                                                                    value="Increase Value">+</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="_p-features">
+                                                            <span> Description About this product:- </span>
+                                                            {{product.productDescription}}
+                                                        </div>
+                                                        <form action="" method="post" accept-charset="utf-8">
+                                                            <ul class="spe_ul"></ul>
+                                                            <div class="_p-qty-and-cart">
+                                                                <div class="_p-add-cart">
+                                                                    <button class="btn-theme btn buy-btn" tabindex="0">
+                                                                        <i class="fa fa-shopping-cart"></i> Buy Now
+                                                                    </button>
+                                                                    <button class="btn-theme btn btn-success"
+                                                                        tabindex="0" onclick(`{{this._id}}`)">
+                                                                        <i class="fa fa-shopping-cart"></i> Add to Cart
+                                                                    </button>
+                                                                    <input type="hidden" name="pid" value="18" />
+                                                                    <input type="hidden" name="price" value="850" />
+                                                                    <input type="hidden" name="url" value="" />
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </section>
+                                {{/if}}
+
+                                <script>
+                                    /*!     
+                    jquery.picZoomer.js
+                    v 1.0
+                    David
+                    http://www.CodingSerf.com
+            */
+
+                                    ; (function ($) {
+                                        $.fn.picZoomer = function (options) {
+                                            var opts = $.extend({}, $.fn.picZoomer.defaults, options),
+                                                $this = this,
+                                                $picBD = $('<div class="picZoomer-pic-wp"></div>').css({ 'width': opts.picWidth + 'px', 'height': opts.picHeight + 'px' }).appendTo($this),
+                                                $pic = $this.children('img').addClass('picZoomer-pic').appendTo($picBD),
+                                                $cursor = $('<div class="picZoomer-cursor"><i class="f-is picZoomCursor-ico"></i></div>').appendTo($picBD),
+                                                cursorSizeHalf = { w: $cursor.width() / 2, h: $cursor.height() / 2 },
+                                                $zoomWP = $('<div class="picZoomer-zoom-wp"><img src="" alt="" class="picZoomer-zoom-pic"></div>').appendTo($this),
+                                                $zoomPic = $zoomWP.find('.picZoomer-zoom-pic'),
+                                                picBDOffset = { x: $picBD.offset().left, y: $picBD.offset().top };
+
+
+                                            opts.zoomWidth = opts.zoomWidth || opts.picWidth;
+                                            opts.zoomHeight = opts.zoomHeight || opts.picHeight;
+                                            var zoomWPSizeHalf = { w: opts.zoomWidth / 2, h: opts.zoomHeight / 2 };
+
+                                            $zoomWP.css({ 'width': opts.zoomWidth + 'px', 'height': opts.zoomHeight + 'px' });
+                                            $zoomWP.css(opts.zoomerPosition || { top: 0, left: opts.picWidth + 30 + 'px' });
+
+                                            $zoomPic.css({ 'width': opts.picWidth * opts.scale + 'px', 'height': opts.picHeight * opts.scale + 'px' });
+
+                                            $picBD.on('mouseenter', function (event) {
+                                                $cursor.show();
+                                                $zoomWP.show();
+                                                $zoomPic.attr('src', $pic.attr('src'))
+                                            }).on('mouseleave', function (event) {
+                                                $cursor.hide();
+                                                $zoomWP.hide();
+                                            }).on('mousemove', function (event) {
+                                                var x = event.pageX - picBDOffset.x,
+                                                    y = event.pageY - picBDOffset.y;
+
+                                                $cursor.css({ 'left': x - cursorSizeHalf.w + 'px', 'top': y - cursorSizeHalf.h + 'px' });
+                                                $zoomPic.css({ 'left': -(x * opts.scale - zoomWPSizeHalf.w) + 'px', 'top': -(y * opts.scale - zoomWPSizeHalf.h) + 'px' });
+
+                                            });
+                                            return $this;
+
+                                        };
+                                        $.fn.picZoomer.defaults = {
+                                            picHeight: 460,
+                                            scale: 2.5,
+                                            zoomerPosition: { top: '0', left: '380px' },
+
+                                            zoomWidth: 400,
+                                            zoomHeight: 460
+                                        };
+                                    })(jQuery);
+
+
+
+                                    $(document).ready(function () {
+                                        $('.picZoomer').picZoomer();
+                                        $('.piclist li').on('click', function (event) {
+                                            var $pic = $(this).find('img');
+                                            $('.picZoomer-pic').attr('src', $pic.attr('src'));
+                                        });
+
+                                        var owl = $('#recent_post');
+                                        owl.owlCarousel({
+                                            margin: 20,
+                                            dots: false,
+                                            nav: true,
+                                            navText: [
+                                                "<i class='fa fa-chevron-left'></i>",
+                                                "<i class='fa fa-chevron-right'></i>"
+                                            ],
+                                            autoplay: true,
+                                            autoplayHoverPause: true,
+                                            responsive: {
+                                                0: {
+                                                    items: 2
+                                                },
+                                                600: {
+                                                    items: 3
+                                                },
+                                                1000: {
+                                                    items: 5
+                                                },
+                                                1200: {
+                                                    items: 4
+                                                }
+                                            }
+                                        });
+
+                                        $('.decrease_').click(function () {
+                                            decreaseValue(this);
+                                        });
+                                        $('.increase_').click(function () {
+                                            increaseValue(this);
+                                        });
+                                        function increaseValue(_this) {
+                                            var value = parseInt($(_this).siblings('input#number').val(), 10);
+                                            value = isNaN(value) ? 0 : value;
+                                            value++;
+                                            $(_this).siblings('input#number').val(value);
+                                        }
+
+                                        function decreaseValue(_this) {
+                                            var value = parseInt($(_this).siblings('input#number').val(), 10);
+                                            value = isNaN(value) ? 0 : value;
+                                            value < 1 ? value = 1 : '';
+                                            value--;
+                                            $(_this).siblings('input#number').val(value);
+                                        }
+                                    });
+
+                                </script>
+                                {{!--
+                                {{!-- {{#if product}} --}}
+                                {{!-- <div class="row thb-product-main-row"> --}}
+                                    {{!-- <div class="small-12 medium-6 large-7 columns product-gallery-column"> --}}
+                                        {{!-- <div
+                                            class="woocommerce-product-gallery woocommerce-product-gallery--with-images woocommerce-product-gallery--columns-4 images"
+                                            --}} {{!-- data-columns="4"
+                                            style="opacity: 0; transition: opacity .25s ease-in-out;"> --}}
+                                            {{!-- <figure class="woocommerce-product-gallery__wrapper"> --}}
+                                                {{!-- <div
+                                                    data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2.png?fit=124%2C124&#038;ssl=1"
+                                                    --}} {{!-- data-thumb-alt=""
+                                                    class="woocommerce-product-gallery__image"><a --}} {{!--
+                                                        href="{{product.productImage.[0]}}"><img --}} {{!-- width="550"
+                                                            height="550" --}} {{!-- src="{{product.productImage.[0]}}"
+                                                            --}} {{!-- class="wp-post-image jetpack-lazy-image" alt=""
+                                                            --}} {{!-- decoding="async" title="h2" data-caption="" --}}
+                                                            {{!-- data-src="{{product.productImage.[0]}}" --}} {{!--
+                                                            data-large_image="{{product.productImage.[0]}}" --}} {{!--
                                                             data-large_image_width="1100" data-large_image_height="1100"
-                                                            loading="lazy"
+                                                            --}} {{!-- loading="lazy"
                                                             data-lazy-srcset="{{product.productImage.[0]}} 1100w, {{product.productImage.[0]}} 500w, {{product.productImage.[0]}} 150w, {{product.productImage.[0]}} 550w, {{product.productImage.[0]}} 124w"
                                                             data-lazy-sizes="(max-width: 550px) 100vw, 550px"
                                                             data-lazy-src="{{product.productImage.[0]}}"
@@ -792,8 +1413,7 @@
                                                 <div data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-1.jpg?fit=124%2C124&#038;ssl=1"
                                                     data-thumb-alt="" class="woocommerce-product-gallery__image"><a
                                                         href="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-1.jpg?fit=1100%2C1100&#038;ssl=1"><img
-                                                            width="550" height="550"
-                                                            src="{{product.productImage.[1]}}"
+                                                            width="550" height="550" src="{{product.productImage.[1]}}"
                                                             class=" jetpack-lazy-image" alt="" decoding="async"
                                                             title="h2-1" data-caption=""
                                                             data-src="{{product.productImage.[1]}}"
@@ -808,8 +1428,7 @@
                                                 <div data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-2.jpg?fit=124%2C124&#038;ssl=1"
                                                     data-thumb-alt="" class="woocommerce-product-gallery__image"><a
                                                         href="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-2.jpg?fit=1100%2C1100&#038;ssl=1"><img
-                                                            width="550" height="550"
-                                                            src="{{product.productImage.[2]}}"
+                                                            width="550" height="550" src="{{product.productImage.[2]}}"
                                                             class=" jetpack-lazy-image" alt="" decoding="async"
                                                             title="h2-2" data-caption=""
                                                             data-src="{{product.productImage.[2]}}"
@@ -819,9 +1438,10 @@
                                                             data-lazy-srcset="{{product.productImage.[2]}} 1100w, {{product.productImage.[2]}} 500w, {{product.productImage.[2]}} 150w, {{product.productImage.[2]}} 550w, {{product.productImage.[2]}} 124w"
                                                             data-lazy-sizes="(max-width: 550px) 100vw, 550px"
                                                             data-lazy-src="{{product.productImage.[2]}}"
-                                                            srcset="{{product.productImage.[0]}}" /></a>
-                                                </div>
-                                                {{!-- <div data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-3.jpg?fit=124%2C124&#038;ssl=1"
+                                                            srcset="{{product.productImage.[0]}}" /></a> --}}
+                                                    {{!-- </div> --}}
+                                                {{!-- <div
+                                                    data-thumb="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-3.jpg?fit=124%2C124&#038;ssl=1"
                                                     data-thumb-alt="" class="woocommerce-product-gallery__image"><a
                                                         href="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-3.jpg?fit=1100%2C1100&#038;ssl=1"><img
                                                             width="550" height="550"
@@ -837,6 +1457,7 @@
                                                             data-lazy-src="https://i0.wp.com/smarthome.fuelthemes.net/wp-content/uploads/2021/03/h2-3.jpg?fit=550%2C550&amp;ssl=1&amp;is-pending-load=1"
                                                             srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" /></a>
                                                 </div> --}}
+                                                {{!--
                                             </figure>
                                         </div>
                                     </div>
@@ -845,7 +1466,8 @@
                                         <div class="summary entry-summary">
                                             <h1 class="product_title entry-title">{{product.productName}}</h1>
                                             <p class="price">
-                                                <span class="woocommerce-Price-amount amount"><bdi>₹{{product.productPrice}}</bdi></span>
+                                                <span
+                                                    class="woocommerce-Price-amount amount"><bdi>₹{{product.productPrice}}</bdi></span>
                                             </p>
                                             <div class="woocommerce-product-details__short-description">
                                                 <p>{{product.productDescription}}</p>
@@ -897,10 +1519,14 @@
                                             </form>
                                         </div>
                                     </div>
-                                </div>
-                           {{/if}}
+                                </div> --}}
+                                {{!-- {{/if}} --}}
 
-{{!-- ************************************************************************************************************************************************************************************************************************************************************************************************                                 --}}
+                                {{!--
+                                ************************************************************************************************************************************************************************************************************************************************************************************************
+                                --}}
+
+
 
                                 <div class="woocommerce-tabs wc-tabs-wrapper">
                                     <ul class="tabs wc-tabs" role="tablist">
@@ -961,16 +1587,16 @@
 
                                                 <figure class="wp-block-image size-large is-resized"><img
                                                         decoding="async" fetchpriority="high"
-                                                        src="{{product.productImage.[0]}}"
-                                                        alt class="wp-image-52 jetpack-lazy-image" width="767"
-                                                        height="331" data-recalc-dims="1"
+                                                        src="{{product.productImage.[0]}}" alt
+                                                        class="wp-image-52 jetpack-lazy-image" width="767" height="331"
+                                                        data-recalc-dims="1"
                                                         data-lazy-srcset="{{product.productImage.[0]}} 1024w, {{product.productImage.[0]}} 550w"
                                                         data-lazy-sizes="(max-width: 767px) 100vw, 767px"
                                                         data-lazy-src="{{product.productImage.[0]}}"
                                                         srcset="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7"><noscript><img
                                                             data-lazy-fallback="1" decoding="async" fetchpriority="high"
-                                                            src="{{product.productImage.[0]}}"
-                                                            alt="" class="wp-image-52" width="767" height="331"
+                                                            src="{{product.productImage.[0]}}" alt=""
+                                                            class="wp-image-52" width="767" height="331"
                                                             srcset="{{product.productImage.[0]}} 1024w, {{product.productImage.[0]}} 550w"
                                                             sizes="(max-width: 767px) 100vw, 767px"
                                                             data-recalc-dims="1" /></noscript></figure>
@@ -1211,7 +1837,8 @@
                                                             title="Linksys &#8211; Velop AC2200 Tri-Band Mesh Wi-Fi 5 System">Linksys
                                                             &#8211; Velop AC2200 Tri-Band Mesh Wi-Fi 5 System</a></h2>
 
-                                                    <span class="price"><span class="woocommerce-Price-amount amount"><bdi>₹32000</bdi></span></span>
+                                                    <span class="price"><span
+                                                            class="woocommerce-Price-amount amount"><bdi>₹32000</bdi></span></span>
                                                     <a href="?add-to-cart=89" data-quantity="1"
                                                         class="button wp-element-button product_type_simple add_to_cart_button ajax_add_to_cart"
                                                         data-product_id="89" data-product_sku="32930"
@@ -1229,8 +1856,7 @@
                                                     <a href="https://smarthome.fuelthemes.net/product/amazon-echo-dot-3rd-gen-smart-speaker-with-alexa/"
                                                         class="woocommerce-LoopProduct-link woocommerce-loop-product__link">
                                                         <span class="onsale">Sale!</span>
-                                                        <img width="550" height="550"
-                                                            src="{{product.productImage.[0]}}"
+                                                        <img width="550" height="550" src="{{product.productImage.[0]}}"
                                                             class="attachment-woocommerce_thumbnail size-woocommerce_thumbnail jetpack-lazy-image"
                                                             alt="" decoding="async" loading="lazy"
                                                             data-lazy-srcset="{{product.productImage.[0]}} 1100w, {{product.productImage.[0]}} 500w, {{product.productImage.[0]}} 150w, {{product.productImage.[0]}} 550w, {{product.productImage.[0]}} 124w"
@@ -1819,7 +2445,7 @@
 
                 document.body.addEventListener('click', function (event) {
                     if (!event.target) {
-                        return;
+                        return; autoplayHoverPause
                     }
 
                     var el;
