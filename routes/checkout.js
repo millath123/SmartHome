@@ -4,34 +4,40 @@ const path = require("path");
 const Product = require('../model/productmodel');
 const Cart = require('../model/cartmodel');
 const User = require('../model/usermodel');
-const Checkout = require('../model/checkout');
 const Profile = require('../model/profile');
 
 
 router.get('/checkout', async (req, res) => {
-    const userToken = req.cookies.user_token;
-    let user = await User.findOne({ token: userToken });
-    console.log(user);     
+    try {
+        const userToken = req.cookies.user_token;
+        let user = await User.findOne({ token: userToken });
 
-    const cartItems = await Cart.find({ userId: user._id });
-    console.log(cartItems);
-    const productIds = cartItems.map(item => item.productId);
-    const productData = await Product.find({ _id: productIds });
-    console.log(productData);
-    
-  
-    const profile = await Profile.findOne({ userId: user._id });
-    console.log(profile);
+        const cartItems = await Cart.find({ userId: user._id });
 
-    // const checkoutItems = await Checkout.find({ userId: user._id });
-    // console.log(checkoutItems);
-    // const checkoutIds = checkoutItems.map(item => item.checkoutIds);
+        const productIds = cartItems.map(item => item.productId);
 
-    // const specificCheckoutData = await Checkout.find({ _id: checkoutIds });
-    // console.log(specificCheckoutData);
+        const productData = await Product.find({ _id: productIds });
 
-    res.render(path.join(__dirname, '../views/user/checkout'), { cart: cartItems, product: productData, profile });
+        const profile = await Profile.find({ userId: user._id });
+
+        // let profileIds = [];
+
+        // if (profile && profile.length > 0) {
+        //     profileIds = profile.map(item => item.profileId);
+        //     console.log(profileIds);
+        // } else {
+        //     console.log("No profile found for this user.");
+        // }
+
+        // Rest of your code
+
+        res.render(path.join(__dirname, '../views/user/checkout'), {cart: cartItems,product: productData, profile });
+    } catch (error) {
+        console.error(error);
+        res.status(500).send('Internal Server Error');
+    }
 });
+
 
 
 //   router.post('/checkout', async (req, res) => {
@@ -40,7 +46,7 @@ router.get('/checkout', async (req, res) => {
 //       const existingUser = await Checkout.findOne({ email });
 
 //       if (existingUser) {
-//         return res.status(400).send('Email is already in use. Please use a  different email.');
+//         return res.status(400).se`d('Email is already in use. Please use a  different email.');
 //       }
 //       const userToken = req.cookies.user_token;
 //       let user = await User.findOne({ token: userToken });

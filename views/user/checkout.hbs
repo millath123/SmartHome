@@ -75,29 +75,23 @@
                 completing it.</p> --}}
         </div>
 
-
-
         <div class="row">
             <div class="col-md-4 order-md-2 mb-4">
                 <h4 class="d-flex justify-content-between align-items-center mb-3">
                     <span class="text-muted">Your cart</span>
                     <span class="badge badge-secondary badge-pill">3</span>
                 </h4>
+                {{#each product}}
                 <ul class="list-group mb-3">
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
+
                             <h6 class="my-0">{{this.productName}}</h6>
                             <small class="text-muted">{{this.productCategory}}</small>
                         </div>
                         <span class="text-muted">{{this.productPrice}}</span>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between lh-condensed">
-                        <div>
-                            <h6 class="my-0">Second product</h6>
-                            <small class="text-muted">Brief description</small>
-                        </div>
-                        <span class="text-muted">Rs.15000</span>
-                    </li>
+                                   {{/each}}
                     {{!-- <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
                             <h6 class="my-0">Third item</h6>
@@ -116,7 +110,6 @@
                         <span>Total</span>
                         <strong>Rs.15000</strong>
                     </li>
-                </ul>
 
                 <form class="card p-2">
                     <div class="input-group">
@@ -128,7 +121,6 @@
                 </form>
             </div>
 
-         
 
             <div style="display: flex;">
                 <h5>Select Delivery Address</h5>
@@ -141,24 +133,24 @@
             <h6 class="mb-3">Defualt Address</h6>
 
 
-            {{#if profile}}
+            {{#each profile}}
             <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
                 <form class="needs-validation" novalidate>
                     <div class="row" style="display: flex;">
                         <div class="col-md-6 mb-3">
-                            <h3>{{profile.name}}</h3>
-                            <p>{{profile.address}}</p>
-                            <p>PinCode: {{profile.pinCode}}</p>
-                            <p>{{profile.mobileNo}}</p>
+                            <h3>{{this.name}}</h3>
+                            <p>{{this.address}}</p>
+                            <p>PinCode: {{this.pinCode}}</p>
+                            <p>{{this.mobileNo}}</p>
                             <button type="button" id="removebtn">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
                 </form>
             </div>
-            {{/if}}
+            {{/each}}
 
-           
+
         </div>
         {{!-- <div id="addadress2">
             +ADD NEW ADDRESS
@@ -176,7 +168,7 @@
     </div>
     </div>
 
-   <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -238,7 +230,7 @@
 
 
     <script>
-       document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', () => {
             let submitAddressBtn = document.getElementById('submitAddressBtn');
             if (submitAddressBtn) {
                 submitAddressBtn.addEventListener('click', async () => {
@@ -274,13 +266,14 @@
                     } catch (error) {
                         console.error('Error adding address:', error);
                     }
-                })};
-            });  
-              
+                })
+            };
+        });
+
     </script>
 
     <hr class="mb-4">
- <footer class="my-5 pt-5 text-muted text-center text-small">
+    <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">© 2021 - 2045 smartHome</p>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="/users">Home</a></li>

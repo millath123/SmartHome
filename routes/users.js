@@ -28,7 +28,7 @@ router.get('/', async (req, res) => {
 });
 
 
-/* GET users listing. */
+/* GETusers listing. */
 router.get('/register', function (req, res, next) {
   res.render(path.join(__dirname, '../views/user/register'))
 });
@@ -256,7 +256,6 @@ router.post('/profile', async (req, res) => {
     res.status(500).send('Error saving user to the database');
   }
 });
-
 
 // Fetch user profile details by email
 // router.get('/profile/:email', async (req, res) => {
