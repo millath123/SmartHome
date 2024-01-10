@@ -162,3 +162,9 @@
 //     }
 // })
 // }
+
+// function stairsIn20(s){
+//     let oneYrTotl=s.reduce((total, dailyStairs)=>total+dailyStairs,0);
+//       let twentyYrEstmt=oneYrTotl*20;
+//   return twentyYrEstmt;
+//   }
