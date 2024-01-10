@@ -191,8 +191,6 @@
             background-position-x: 95%;
             background-position-y: center;
         }
-
-
         .qty {
             display: flex;
             align-items: center;
@@ -323,9 +321,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const qtyContainers = document.querySelectorAll('.qty');
-
             qtyContainers.forEach(container => {
-
                 const decrementButton = container.querySelector('.decrement');
                 const incrementButton = container.querySelector('.increment');
                 const quantityElement = container.querySelector('.quantity');
@@ -371,7 +367,6 @@
                     const price = parseFloat(priceText);
                     totalSum += price;
                 });
-
                 const totalSumElement = document.getElementById('totalSum');
                 totalSumElement.textContent = `₹${totalSum.toFixed(2)}`;
             };
@@ -384,7 +379,8 @@
         document.addEventListener('DOMContentLoaded', () => {
             const updateTotalItems = () => {
                 const cartItems = document.querySelectorAll('.row.main');
-                const totalItemsElement = document.getElementById('totalItems');
+                const totalItemsElement 
+                + document.getElementById('totalItems');
 
                 const totalItems = cartItems.length;
                 totalItemsElement.textContent = `ITEMS ${totalItems}`;

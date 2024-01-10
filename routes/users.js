@@ -179,7 +179,7 @@ router.post('/login', async (req, res) => {
   }
 });
 
-// //mobail OTP
+////mobail OTP
 
 router.get('/mobileotp', (req, res) => {
   res.render(path.join(__dirname, '../views/user/mobileOTP'))
@@ -213,66 +213,27 @@ catch(err){
 
 });
 
-
 // profile
 
-router.get('/profile', (req, res) => {
-  res.render(path.join(__dirname, '../views/user/profile'))
+router.get('/profile',async(req, res) => {
+  const profile = await Profile.find()
+
+  res.render(path.join(__dirname, '../views/user/profile'),{profile})
 });
-
-
-// router.post('/profile', async (req, res) => {
-//   const name = req.cookies.name;
-//   const mobileNo = req.body.mobileNo;
-//   const email = req.body.email;
-//   const pinCode = req.body.pinCode;
-//   const address = req.body.address;
-//   const locality = req.body.locality;
-//   const state = req.body.state;
-//   const saveAddressAs = req.body.saveAddressAs;
-//   const city = req.body.city;
-
-
-//   try {
-
-//     const existingUser = await User.findOne({ email });
-
-//     if (existingUser) {
-//       return res.status(400).send('Email is already in use. Please use a different email.');
-//     }
-//     const UserDtails = new User({
-//       name,
-//       mobileNo,
-//       email,
-//       pinCode,
-//       address,
-//       locality,city,
-//       state,
-//       saveAddressAs,
-//     });
-
-//     await UserDtails.save();
-
-//     res.redirect('/users/profile');
-//   } catch (err) {
-//     console.error(err);
-//     res.status(500).send('Error saving user to the database');
-//   }
-// });
-
-
 
 router.post('/profile', async (req, res) => {
   const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;
 
   try {
     const existingUser = await Profile.findOne({ email });
-
+    const userToken = req.cookies.user_token;
+    let user = await User.findOne({ token: userToken });
     if (existingUser) {
-      return res.status(400).send('Email is already in use. Please use a different email.');
+      return res.status(400).send('This mail is already used');
     }
 
     const userProfile = new Profile({
+      userId: user._id,
       name,
       mobileNo,
       email,
@@ -292,6 +253,10 @@ router.post('/profile', async (req, res) => {
   }
 });
 
+
+
+
+
 // Fetch user profile details by email
 // router.get('/profile/:email', async (req, res) => {
 //   const userEmail = req.params.email;
@@ -309,6 +274,7 @@ router.post('/profile', async (req, res) => {
 //     res.status(500).send('Error fetching user profile');
 //   }
 // });
+
 
 module.exports = router;
 

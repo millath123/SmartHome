@@ -143,3 +143,22 @@
 //     let c= "hello";
 //     return c.split().length();
 //     }
+
+
+// function gimme (triplet) {
+//     const sorted = triplet.slice().sorted((a,b)=>a-b);
+//     const middilevalue= sorted[1];
+//     return triplet.indexOf(middilevalue);
+//    }
+
+
+// function openOrSenior(data){
+// return (([age,handicap])=>{
+//     if(age>55 &&handicap>7 ){
+//         return Open ;
+//     }
+//     else{
+//         return Senior;
+//     }
+// })
+// }

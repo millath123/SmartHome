@@ -31,26 +31,30 @@
             border-color: black;
             color: black;
         }
-        #removebtn{
+
+        #removebtn {
             background-color: white;
             border-color: black;
             color: black;
         }
-        #editbtn{
+
+        #editbtn {
             background-color: white;
             border-color: black;
             color: black;
         }
-.checkout-steps{
-    list-style: none;
-    display: flex;
-    
-    justify-content: center;
-}
-       #headadress{
-        color: #20BD99;
-;
-       } 
+
+        .checkout-steps {
+            list-style: none;
+            display: flex;
+
+            justify-content: center;
+        }
+
+        #headadress {
+            color: #20BD99;
+            ;
+        }
     </style>
 </head>
 
@@ -59,12 +63,14 @@
     <div class="container">
         <div class="py-5 text-center">
 
-<ol class="checkout-steps "> 
-    <li class="step step1 clickable">BAG  -------  </li> 
- <li class="divider"></li> 
- <li class="step step2 active" id="headadress">ADDRESS</li>
-  <li class="divider"></li>
-   <li class="step step3">  -------  PAYMENT</li> </ol>            {{!-- <p class="lead">Below is an example form built entirely with Bootstrap 5 form controls. Each required
+            <ol class="checkout-steps ">
+                <li class="step step1 clickable">BAG ------- </li>
+                <li class="divider"></li>
+                <li class="step step2 active" id="headadress">ADDRESS</li>
+                <li class="divider"></li>
+                <li class="step step3"> ------- PAYMENT</li>
+            </ol> {{!-- <p class="lead">Below is an example form built entirely with Bootstrap 5 form controls. Each
+                required
                 form group has a validation state that can be triggered by attempting to submit the form without
                 completing it.</p> --}}
         </div>
@@ -83,32 +89,32 @@
                             <h6 class="my-0">Product name</h6>
                             <small class="text-muted">Brief description</small>
                         </div>
-                        <span class="text-muted">$12</span>
+                        <span class="text-muted">Rs.1000</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
                             <h6 class="my-0">Second product</h6>
                             <small class="text-muted">Brief description</small>
                         </div>
-                        <span class="text-muted">$8</span>
+                        <span class="text-muted">Rs.1000</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
                             <h6 class="my-0">Third item</h6>
                             <small class="text-muted">Brief description</small>
                         </div>
-                        <span class="text-muted">$5</span>
+                        <span class="text-muted">Rs.1000</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between bg-light">
                         <div class="text-success">
                             <h6 class="my-0">Promo code</h6>
                             <small>EXAMPLECODE</small>
                         </div>
-                        <span class="text-success">-$5</span>
+                        <span class="text-success">Rs.1000</span>
                     </li>
                     <li class="list-group-item d-flex justify-content-between">
                         <span>Total (USD)</span>
-                        <strong>$20</strong>
+                        <strong>Rs.4000</strong>
                     </li>
                 </ul>
 
@@ -122,10 +128,12 @@
                 </form>
             </div>
 
+         
+
             <div style="display: flex;">
                 <h5>Select Delivery Address</h5>
                 <button type="button" id="showAdminModalBtn" style="margin-left: 300px;" class="btn btn-primary"
-                    data-bs-toggle="modal" data-bs-target="">
+                    data-bs-toggle="modal" data-bs-target="#adminModal">
                     ADD NEW ADDRESS
                 </button>
 
@@ -133,22 +141,22 @@
             <h6 class="mb-3">Defualt Address</h6>
 
 
-            <div class="col-md-8 order-md-1" id="defaultAddress">
+            <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
                 <form class="needs-validation" novalidate>
                     <div class="row" style="display: flex;">
                         <div class="col-md-6 mb-3">
-                            <h3>NAME</h3>
-                            <p>ADDRESS</p>
-                            <p>PINCODE</p>
-                            <p>MOBILE NO</p>
-                            <button  type="button" id="removebtn">REMOVE</button>
+                            <h3>{{checkout.name}}</h3>
+                            <p>{{checkout.mobileNo}}</p>
+                            <p>{{checkout.email}}</p>
+                            <p>{{checkout.pinCode}}</p>
+                            <button type="button" id="removebtn">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
                 </form>
             </div>
 
-
+           
         </div>
         {{!-- <div id="addadress2">
             +ADD NEW ADDRESS
@@ -157,21 +165,20 @@
     </div>
     </div>
 
- 
 
-    {{!-- <hr class="mb-4">
+
+    {{!--
+    <hr class="mb-4">
     <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button> --}}
     </form>
     </div>
     </div>
 
-
-
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+   <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalCenterTitle">Admin Credentials</h5>
+                    <h5 class="modal-title" id="modalCenterTitle">ADD ADDRESS</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
@@ -179,14 +186,17 @@
                         <div class="col mb-3">
                             <label for="adEmail" class="form-label">CONTACT DETAILS</label>
                             <input type="text" id="name" class="form-control" placeholder="Name*" />
-                            <input type="tel" id="adEmail" class="form-control" placeholder="Mobail No*" />
+                            <input type="tel" id="mobileNo" class="form-control" placeholder="Mobile No*" />
+                            <input type="email" name="email" class="form-control" id="email" placeholder="Email*" />
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-3">
-                            <label for="adminPassword" class="form-label">ADDRESS</label>
+                            <label for="adminPassword" class="form-label">Pin Code</label>
                             <input type="number" id="pincode" class="form-control" placeholder="Pin Code*" />
-                            <input type="password" id="adminPassword" class="form-control"
+                            <label for="adminPassword" class="form-label">ADDRESS</label>
+
+                            <input type="text" id="address" class="form-control"
                                 placeholder="Address(House No, Building, Street, Area*" />
                             <input type="text" id="locality" class="form-control" placeholder="Localiy/Town*" />
                             <div style="display: flex;">
@@ -200,9 +210,9 @@
                         <label for="adminPassword" class="form-label">Save Address As</label>
                         <div style="display: flex;">
                             <input type="button" id="home" class="form-control" placeholder="Home" /
-                                style="border-radius: 50px; width:75px">
+                                style="border-radius: 50px; width:75px ;color:black;">
                             <input type="button" id="work" class="form-control" placeholder="Work" /
-                                style="border-radius: 50px;width:75px">
+                                style="border-radius: 50px;width:75px;color:black;">
                         </div>
                     </div>
 
@@ -217,26 +227,58 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" id="modalok" class="btn btn-primary">ADD ADDRESS</ADDress></button>
+                    <button id="submitAddressBtn" class="btn btn-primary">Add Address</button>
                 </div>
             </div>
         </div>
     </div>
-    
+
+
 
     <script>
-        const showAdminModalBtn = document.getElementById('showAdminModalBtn');
+       document.addEventListener('DOMContentLoaded', () => {
+            let submitAddressBtn = document.getElementById('submitAddressBtn');
+            if (submitAddressBtn) {
+                submitAddressBtn.addEventListener('click', async () => {
+                    modal.show();
+                });
 
-        showAdminModalBtn.addEventListener('click', function () {
-            const adminEmailInput = document.getElementById('adEmail');
-            adminEmailInput.value = '{{admin.email}}';
+                let submitAddressBtn = document.getElementById('submitAddressBtn');
+                submitAddressBtn.addEventListener('click', async () => {
+                    try {
+                        const name = document.getElementById('name').value;
+                        const email = document.getElementById('email').value;
+                        const mobileNo = document.getElementById('mobileNo').value;
+                        const pinCode = document.getElementById('pincode').value;
+                        const address = document.getElementById('address').value;
+                        const locality = document.getElementById('locality').value;
+                        const city = document.getElementById('city').value;
+                        const state = document.getElementById('state').value;
+                        const saveAddressAs = document.getElementById('home').value;
 
-            const myModal = new bootstrap.Modal(document.getElementById('adminModal'));
-            myModal.show();
-        });
+                        const response = await axios.post('/users/profile', {
+                            name,
+                            mobileNo,
+                            email,
+                            pinCode,
+                            address,
+                            locality,
+                            city,
+                            state,
+                            saveAddressAs,
+                        });
+
+                        console.log('Address added:', response.data);
+                        modal.hide();
+                    } catch (error) {
+                        console.error('Error adding address:', error);
+                    }
+                })};
+            });  
+              
     </script>
 
-     <hr class="mb-4">
+    <hr class="mb-4">
     <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">© 2021 - 2045 Company Name</p>
         <ul class="list-inline">
