@@ -9,7 +9,7 @@ const router = express.Router();
 router.get('/',  async (req, res) => {
   const category = await Category.find()
   console.log(category);
-  res.render(path.join(__dirname, '../views/admin/category'), { category })
+  res.render(path.join(__dirname, '../views/user/category'), { category })
 });
 
 const storage = new CloudinaryStorage({

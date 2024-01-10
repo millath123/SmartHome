@@ -69,11 +69,11 @@
         <div class="py-5 text-center">
 
             <ol class="checkout-steps ">
-                <li class="step step1 clickable">USER ------- </li>
+                {{!-- <li class="step step1 clickable">USER ------- </li> --}}
                 <li class="divider"></li>
-                <li class="step step2 active" id="headadress">ADDRESS</li>
+                <li class="step step2 active" id="headadress">USER PROFILE</li>
                 <li class="divider"></li>
-                <li class="step step3"> ------- DETAILS</li>
+                {{!-- <li class="step step3"> ------- DETAILS</li> --}}
             </ol> {{!-- <p class="lead">Below is an example form built entirely with Bootstrap 5 form controls. Each
                 required
                 form group has a validation state that can be triggered by attempting to submit the form without
@@ -143,22 +143,22 @@
             </div>
             <h6 class="mb-3">Defualt Address</h6>
 
-
+            {{#if profile}}
             <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
                 <form class="needs-validation" novalidate>
                     <div class="row" style="display: flex;">
                         <div class="col-md-6 mb-3">
-                            <h3>NAME</h3>
-                            <p>ADDRESS</p>
-                            <p>PINCODE</p>
-                            <p>MOBILE NO</p>
+                            <h3>{{profile.name}}</h3>
+                            <p>{{profile.address}}</p>
+                            <p>PinCode: {{profile.pinCode}}</p>
+                            <p>{{profile.mobileNo}}</p>
                             <button type="button" id="removebtn">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
                 </form>
             </div>
-
+            {{/if}}
 
         </div>
 
@@ -175,6 +175,7 @@
     {{!--
     <hr class="mb-4">
     <button class="btn btn-primary btn-lg btn-block" type="submit">Continue to checkout</button> --}}
+
     </form>
     </div>
     </div>
@@ -216,10 +217,10 @@
                     <div class="row">
                         <label for="adminPassword" class="form-label">Save Address As</label>
                         <div style="display: flex;">
-                            <input   style="border-radius: 50px; width:75px ;color:black; hight:10px"type="radio" id="home" class="form-control" placeholder="Home" /
-                              >
-                            <input style="border-radius: 50px;width:75px;color:black; hight:10px"type="radio" id="work" class="form-control"placeholder="work*" /
-                                >
+                            <input style="border-radius: 50px; width:75px ;color:black; hight:10px" type="radio"
+                                id="home" class="form-control" placeholder="Home" />
+                            <input style="border-radius: 50px;width:75px;color:black; hight:10px" type="radio" id="work"
+                                class="form-control" placeholder="work*" />
                         </div>
                     </div>
 
@@ -279,18 +280,19 @@
                     } catch (error) {
                         console.error('Error adding address:', error);
                     }
-                })};
-            });  
-              
+                })
+            };
+        });
+
     </script>
 
     <hr class="mb-4">
-    <footer class="my-5 pt-5 text-muted text-center text-small">
-        <p class="mb-1">© 2021 - 2045 Company Name</p>
+   <footer class="my-5 pt-5 text-muted text-center text-small">
+        <p class="mb-1">© 2021 - 2045 smartHome</p>
         <ul class="list-inline">
-            <li class="list-inline-item"><a href="#">Privacy</a></li>
-            <li class="list-inline-item"><a href="#">Terms</a></li>
-            <li class="list-inline-item"><a href="#">Support</a></li>
+            <li class="list-inline-item"><a href="/users">Home</a></li>
+            <li class="list-inline-item"><a href="/product">Products</a></li>
+            <li class="list-inline-item"><a href="#">About us</a></li>
         </ul>
     </footer>
 

@@ -11,11 +11,11 @@ const passport = require('../googleauth');
 const Product = require('../model/productmodel');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const Cart = require('../model/cartmodel');
-const Profile = require('../model/profile'); 
+const Profile = require('../model/profile');
 
 router.use(express.json());
 
-router.get('/',async(req, res) => {
+router.get('/', async (req, res) => {
   const userToken = req.cookies.user_token;
   let user = await User.findOne({ token: userToken });
   console.log(user);
@@ -24,7 +24,7 @@ router.get('/',async(req, res) => {
 
   const productIds = cartItems.map(item => item.productId);
   const productData = await Product.find({ _id: productIds });
-  res.render(path.join(__dirname, '../views/user/index'),{ cart: cartItems, product: productData })
+  res.render(path.join(__dirname, '../views/user/index'), { cart: cartItems, product: productData })
 });
 
 
@@ -42,7 +42,7 @@ router.post('/send-otp', async (req, res) => {
 
   const hashedOtp = await bcrypt.hash('' + otp, 10);
   console.log(hashedOtp);
-  
+
 
   const mailOptions = {
     from: 'adilamillath@gmail.com',
@@ -65,7 +65,7 @@ router.post('/send-otp', async (req, res) => {
     httpOnly: true,
   });
 
- 
+
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
@@ -79,7 +79,7 @@ router.post('/send-otp', async (req, res) => {
         httpOnly: true,
 
       });
-      res.status(200).render(path.join(__dirname, '../views/user/register'),{ sucsess: 'ok' })
+      res.status(200).render(path.join(__dirname, '../views/user/register'), { sucsess: 'ok' })
     }
   });
 });
@@ -143,30 +143,30 @@ router.post('/set-password', async (req, res) => {
     console.error(err);
     res.status(500).send('Error saving user to the database');
   }
-});         
+});
 
-               ///// login page
+///// login page
 
 router.get('/login', (req, res) => {
   res.render(path.join(__dirname, '../views/user/login'))
 });
 
-router.post('/login', async (req, res) => { 
+router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
 
     const user = await User.findOne({ email });
 
     if (!user) {
-      return res.status(401).render(path.join(__dirname, '../views/user/conformreg'),{ invalidmail: 'Invalid Email Address' });
+      return res.status(401).render(path.join(__dirname, '../views/user/conformreg'), { invalidmail: 'Invalid Email Address' });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
 
     if (!passwordMatch) {
-      return res.status(200).render(path.join(__dirname, '../views/user/conformreg'),{ notmatch: 'password not match' });
+      return res.status(200).render(path.join(__dirname, '../views/user/conformreg'), { notmatch: 'password not match' });
     }
 
-    const user_token = jwt.sign({userId :user._id }, process.env.JWT_SECRET)
+    const user_token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET)
     user.token = user_token
     await user.save()
     res.cookie('user_token', user_token, { httpOnly: true });
@@ -196,29 +196,33 @@ router.get('/googleauth/google/callback',
   (req, res) => {
     console.log(req.user)
     res.redirect('/users')
-}
+  }
 );
- 
+
 ///// productdetail
-router.get('/productdetail/:id',  async (req, res) => {
-try{
-  
-  const productId = req.params.id.split(':')[0]; 
-  const product = await Product.findById(productId);
-  res.render(path.join(__dirname,'../views/user/productDetail'),{product});
-}
-catch(err){
-  res.status(500).json({ error: 'Error fetching product details'+err });
-}
+router.get('/productdetail/:id', async (req, res) => {
+  try {
+
+    const productId = req.params.id.split(':')[0];
+    const product = await Product.findById(productId);
+    res.render(path.join(__dirname, '../views/user/productDetail'), { product });
+  }
+  catch (err) {
+    res.status(500).json({ error: 'Error fetching product details' + err });
+  }
 
 });
 
 // profile
 
-router.get('/profile',async(req, res) => {
-  const profile = await Profile.find()
+router.get('/profile', async (req, res) => {
+  const userToken = req.cookies.user_token;
+  let user = await User.findOne({ token: userToken });
 
-  res.render(path.join(__dirname, '../views/user/profile'),{profile})
+  const profile = await Profile.findOne({ userId: user._id });
+  console.log(profile);
+
+  res.render(path.join(__dirname, '../views/user/profile'), { profile })
 });
 
 router.post('/profile', async (req, res) => {
@@ -246,15 +250,12 @@ router.post('/profile', async (req, res) => {
     });
 
     await userProfile.save();
-    res.status(201).json(userProfile); 
+    res.status(201).json(userProfile);
   } catch (err) {
     console.error(err);
     res.status(500).send('Error saving user to the database');
   }
 });
-
-
-
 
 
 // Fetch user profile details by email

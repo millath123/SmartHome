@@ -52,7 +52,7 @@ app.use('/mongo',mongos);
 app.use('/product',productroutes);
 app.use('/category',categoryroutes);
 app.use('/cart',cartroutes);
-app.use('/checkout',checkoutroutes);
+app.use('/',checkoutroutes);
 
 // app.use('/profile',profileroutes);
 

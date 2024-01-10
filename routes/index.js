@@ -25,10 +25,7 @@ router.get('/product',async function (req, res, next) {
 });
 
 
-router.get('/checkout',async function(req, res, next) {
 
-  res.render(path.join(__dirname,'../views/user/checkout'));
-});
 
 
 module.exports = router;
