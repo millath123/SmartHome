@@ -152,7 +152,7 @@
                             <p>{{profile.address}}</p>
                             <p>PinCode: {{profile.pinCode}}</p>
                             <p>{{profile.mobileNo}}</p>
-                            <button type="button" id="removebtn">REMOVE</button>
+                            <button type="button" id="removebtn" onclick="deleteProfile()">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
@@ -286,8 +286,31 @@
 
     </script>
 
+    <script>
+        function deleteProfile() {
+            try {
+                const userId = "{{userToken}}";
+                if (!userId) {
+                    console.error('userId is undefined or null.');
+                    return;
+                }
+
+                axios.delete(`/usres/profile/${userId}`)
+                    .then(() => {
+                        console.log('Profile deleted successfully');
+                    })
+                    .catch(error => {
+                        console.error('Error deleting profile:', error);
+                    });
+            } catch (error) {
+                console.error('An error occurred:', error);
+            }
+        }
+    </script>
+
+
     <hr class="mb-4">
-   <footer class="my-5 pt-5 text-muted text-center text-small">
+    <footer class="my-5 pt-5 text-muted text-center text-small">
         <p class="mb-1">© 2021 - 2045 smartHome</p>
         <ul class="list-inline">
             <li class="list-inline-item"><a href="/users">Home</a></li>
@@ -299,9 +322,7 @@
     <!-- jQuery CDN -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj"
-        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js"  integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
     </div>
 </body>
 

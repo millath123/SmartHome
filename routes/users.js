@@ -257,6 +257,19 @@ router.post('/profile', async (req, res) => {
   }
 });
 
+
+router.delete('/profile/:userId', async (req, res) => {
+  try {
+      const userId = req.params.userId;
+      await Profile.findOneAndDelete({ userId });
+      res.status(204).send();
+  } catch (err) {
+      console.error(err);
+      res.status(500).send('Error deleting profile');
+  }
+});
+
+
 // Fetch user profile details by email
 // router.get('/profile/:email', async (req, res) => {
 //   const userEmail = req.params.email;

@@ -11,13 +11,9 @@ router.get('/checkout', async (req, res) => {
     try {
         const userToken = req.cookies.user_token;
         let user = await User.findOne({ token: userToken });
-
         const cartItems = await Cart.find({ userId: user._id });
-
         const productIds = cartItems.map(item => item.productId);
-
         const productData = await Product.find({ _id: productIds });
-
         const profile = await Profile.find({ userId: user._id });
 
         // let profileIds = [];
@@ -37,8 +33,6 @@ router.get('/checkout', async (req, res) => {
         res.status(500).send('Internal Server Error');
     }
 });
-
-
 
 //   router.post('/checkout', async (req, res) => {
 //     const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;  

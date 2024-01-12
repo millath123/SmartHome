@@ -8,6 +8,8 @@
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 
     <style>
         input {
@@ -91,7 +93,7 @@
                         </div>
                         <span class="text-muted">{{this.productPrice}}</span>
                     </li>
-                                   {{/each}}
+                    {{/each}}
                     {{!-- <li class="list-group-item d-flex justify-content-between lh-condensed">
                         <div>
                             <h6 class="my-0">Third item</h6>
@@ -111,14 +113,14 @@
                         <strong>Rs.15000</strong>
                     </li>
 
-                <form class="card p-2">
-                    <div class="input-group">
-                        <input type="text" class="form-control" placeholder="Promo code">
-                        <div class="input-group-append">
-                            <button type="submit" class="btn btn-secondary">Redeem</button>
+                    <form class="card p-2">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Promo code">
+                            <div class="input-group-append">
+                                <button type="submit" class="btn btn-secondary">Redeem</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
             </div>
 
 
@@ -128,34 +130,42 @@
                     data-bs-toggle="modal" data-bs-target="#adminModal">
                     ADD NEW ADDRESS
                 </button>
-
             </div>
             <h6 class="mb-3">Defualt Address</h6>
 
 
-            {{#each profile}}
-            <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
-                <form class="needs-validation" novalidate>
-                    <div class="row" style="display: flex;">
-                        <div class="col-md-6 mb-3">
-                            <h3>{{this.name}}</h3>
-                            <p>{{this.address}}</p>
-                            <p>PinCode: {{this.pinCode}}</p>
-                            <p>{{this.mobileNo}}</p>
-                            <button type="button" id="removebtn">REMOVE</button>
-                            <button id="editbtn">EDIT</button>
+            <div class="row">
+                <div class="container">
+                    <div class="row">
+                        {{#each profile}}
+                        <div class="col-md-8 order-md-1 address-container" data-profile-id="{{this.id}}">
+                            <ul class="list-group">
+                                <li class="list-group-item">
+                                    {{!-- <label> --}}
+                                        {{!-- </label> --}}
+                                    <h3> <span><input type="radio" name="defaultAddress" class="default-address-radio">
+                                        </span>{{this.name}}</h3>
+                                    <p>{{this.address}}</p>
+                                    <p>PinCode: {{this.pinCode}}</p>
+                                    <p>{{this.mobileNo}}</p>
+                                </li>
+                                <li class="list-group-item">
+                                    <button type="button" class="btn btn-danger removebtn">REMOVE</button>
+                                    <button class="btn btn-primary editbtn">EDIT</button>
+
+                                </li>
+                            </ul>
                         </div>
+                        {{/each}}
                     </div>
-                </form>
+                </div>
             </div>
-            {{/each}}
 
 
+            {{!-- <div id="addadress2">
+                +ADD NEW ADDRESS
+            </div> --}}
         </div>
-        {{!-- <div id="addadress2">
-            +ADD NEW ADDRESS
-        </div> --}}
-    </div>
     </div>
     </div>
 
@@ -168,7 +178,7 @@
     </div>
     </div>
 
-    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+<div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -180,22 +190,30 @@
                         <div class="col mb-3">
                             <label for="adEmail" class="form-label">CONTACT DETAILS</label>
                             <input type="text" id="name" class="form-control" placeholder="Name*" />
+                            <p></p>
                             <input type="tel" id="mobileNo" class="form-control" placeholder="Mobile No*" />
+                            <p></p>
                             <input type="email" name="email" class="form-control" id="email" placeholder="Email*" />
+                            <p></p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col mb-3">
                             <label for="adminPassword" class="form-label">Pin Code</label>
                             <input type="number" id="pincode" class="form-control" placeholder="Pin Code*" />
+                            <p></p>
                             <label for="adminPassword" class="form-label">ADDRESS</label>
 
                             <input type="text" id="address" class="form-control"
                                 placeholder="Address(House No, Building, Street, Area*" />
+                            <p></p>
                             <input type="text" id="locality" class="form-control" placeholder="Localiy/Town*" />
+                            <p></p>
                             <div style="display: flex;">
                                 <input type="text" id="city" class="form-control" placeholder="City/ Dstrict*" />
+                                <p></p>
                                 <input type="text" id="state" class="form-control" placeholder="State*" />
+                                <p></p>
                             </div>
                         </div>
                     </div>
@@ -203,10 +221,12 @@
                     <div class="row">
                         <label for="adminPassword" class="form-label">Save Address As</label>
                         <div style="display: flex;">
-                            <input type="button" id="home" class="form-control" placeholder="Home" /
-                                style="border-radius: 50px; width:75px ;color:black;">
-                            <input type="button" id="work" class="form-control" placeholder="Work" /
-                                style="border-radius: 50px;width:75px;color:black;">
+                            <input style="border-radius: 50px; width:75px ;color:black; hight:10px" type="radio"
+                                id="home" class="form-control" placeholder="Home" />
+                            <p></p>
+                            <input style="border-radius: 50px;width:75px;color:black; hight:10px" type="radio" id="work"
+                                class="form-control" placeholder="work*" />
+                            <p></p>
                         </div>
                     </div>
 
@@ -230,15 +250,14 @@
 
 
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            let submitAddressBtn = document.getElementById('submitAddressBtn');
-            if (submitAddressBtn) {
-                submitAddressBtn.addEventListener('click', async () => {
-                    modal.show();
-                });
+      document.addEventListener('DOMContentLoaded', function () {
+        const submitAddressBtn = document.getElementById('submitAddressBtn');
 
-                let submitAddressBtn = document.getElementById('submitAddressBtn');
-                submitAddressBtn.addEventListener('click', async () => {
+        if (submitAddressBtn) {
+            submitAddressBtn.addEventListener('click', async () => {
+                resetErrorMessages();
+
+                if (validateForm()) {
                     try {
                         const name = document.getElementById('name').value;
                         const email = document.getElementById('email').value;
@@ -248,7 +267,11 @@
                         const locality = document.getElementById('locality').value;
                         const city = document.getElementById('city').value;
                         const state = document.getElementById('state').value;
-                        const saveAddressAs = document.getElementById('home').value;
+                        const saveAddressAs = document.getElementById('home').checked ? 'Home' : 'Work';
+
+                        
+                        modal.show();
+
                         const response = await axios.post('/users/profile', {
                             name,
                             mobileNo,
@@ -266,11 +289,113 @@
                     } catch (error) {
                         console.error('Error adding address:', error);
                     }
-                })
-            };
+                }
+            });
+        }
+    });
+
+ function validateName(name) {
+            return name.trim() !== '';
+        }
+
+            function validateMobileNo(mobileNo) {
+            return /^[0-9]{10}$/.test(mobileNo);
+        }
+
+            function validateEmail(email) {
+            return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+        }
+
+            function validatePincode(pincode) {
+            return /^[0-9]{6}$/.test(pincode);
+        }
+
+            function validateAddress(address) {
+            return address.trim() !== '';
+        }
+
+            function validateLocality(locality) {
+            return locality.trim() !== '';
+        }
+
+    function resetErrorMessages() {
+            if (!validateName(nameInput.value)) {
+                showError(nameInput, 'Please enter a valid name.');
+            }
+
+            if (!validateMobileNo(mobileNoInput.value)) {
+                showError(mobileNoInput, 'Please enter a valid mobile number.');
+            }
+
+            if (!validateEmail(emailInput.value)) {
+                showError(emailInput, 'Please enter a valid email address.');
+            }
+
+            if (!validatePincode(pincodeInput.value)) {
+                showError(pincodeInput, 'Please enter a valid pin code.');
+            }
+
+            if (!validateAddress(addressInput.value)) {
+                showError(addressInput, 'Please enter a valid address.');
+            }
+
+            if (!validateLocality(localityInput.value)) {
+                showError(localityInput, 'Please enter a valid locality/town.');
+            }
+
+            if (!validateCity(cityInput.value)) {
+                showError(cityInput, 'Please enter a valid city/district.');
+            }
+
+            if (!validateState(stateInput.value)) {
+                showError(stateInput, 'Please enter a valid state.');
+            }
+
+            if (!validateRadio(homeRadio) && !validateRadio(workRadio)) {
+                showError(homeRadio, 'Please select Home or Work.');
+            showError(workRadio, 'Please select Home or Work.');
+            }
+
+            
+            if (!hasErrors()) {
+                console.log('Form submitted successfully!');
+            }    }
+
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const defaultAddressRadios = document.querySelectorAll('.default-address-radio');
+
+            defaultAddressRadios.forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    const profileId = radio.closest('.address-container').getAttribute('data-profile-id');
+                    setAsDefaultAddress(profileId);
+                });
+            });
+
+            function setAsDefaultAddress(profileId) {
+                defaultAddressRadios.forEach(function (radio) {
+                    radio.checked = false;
+                });
+
+                const selectedRadio = document.querySelector(`.address-container[data-profile-id="${profileId}"] .default-address-radio`);
+                if (selectedRadio) {
+                    selectedRadio.checked = true;
+                }
+                console.log(`Set default address for profile ${profileId}`);
+            }
         });
 
     </script>
+
+    <script>
+        <!-- Include this script after including the modal HTML in your document -->
+        <script>
+       
+
+    </script>
+
 
     <hr class="mb-4">
     <footer class="my-5 pt-5 text-muted text-center text-small">
