@@ -284,6 +284,22 @@ router.put('/profile/:profileId', async (req, res) => {
 });
 
 
+router.put('/profile/:profileId', async (req, res) => {
+  try {
+      const profileId = req.params.profileId;
+      const updatedData = req.body; 
+      const updatedProfile = await Profile.findByIdAndUpdate(profileId,updatedData, { new:true });
+
+      res.json({ success: true, profile: updatedProfile });
+  } catch (error) {
+      console.error('Error updating profile:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
+  }
+});
+
+
+router.put('/profile')
+
 // Fetch user profile details by email
 // router.get('/profile/:email', async (req, res) => {
 //   const userEmail = req.params.email;
@@ -301,7 +317,6 @@ router.put('/profile/:profileId', async (req, res) => {
 //     res.status(500).send('Error fetching user profile');
 //   }
 // });
-
 
 module.exports = router;
 

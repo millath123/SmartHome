@@ -142,7 +142,6 @@
 
             </div>
             <h6 class="mb-3">Defualt Address</h6>
-
             {{#if profile}}
             <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
                 <form class="needs-validation" novalidate>
@@ -150,7 +149,7 @@
                         <div class="col-md-6 mb-3">
                             <h3>{{profile.name}}</h3>
                             <p>{{profile.address}}</p>
-                            <p>PinCode: {{profile.pinCode}}</p>
+                            <p>PinCode:{{profile.pinCode}}</p>
                             <p>{{profile.mobileNo}}</p>
                     <button type="button" id="removebtn" onclick="deleteProfile('{{profile._id}}')">REMOVE</button>
                             <button id="editbtn">EDIT</button>
@@ -159,7 +158,6 @@
                 </form>
             </div>
             {{/if}}
-
         </div>
 
         {{!-- <div id="addadress2">
@@ -241,8 +239,6 @@
         </div>
     </div>
 
-
-
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             var submitAddressBtn = document.getElementById('submitAddressBtn');
@@ -308,10 +304,6 @@
     }
 </script>
 
-
-
-
-
 <script>
     const submitAddressBtn = document.getElementById('submitAddressBtn');
     submitAddressBtn.addEventListener('click', async () => {
@@ -345,7 +337,6 @@
     });
 
     async function updateProfileWithAxios(updatedData) {
-        // Assuming profileId is available in the HTML or fetched from the server
         const profileId = {{profileId}};
         await axios.put(`/profile/${profileId}`, updatedData);
         console.log('Profile updated successfully');
@@ -356,6 +347,147 @@
         console.log('Address added successfully');
     }
 </script>
+
+
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit Profile</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+           
+
+            <div class="modal-body">
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="adEmail" class="form-label">CONTACT DETAILS</label>
+                            <input type="text" id="editName" class="form-control" placeholder="Name*" />
+                            <input type="tel" id="editMobileNo" class="form-control" placeholder="Mobile No*" />
+                            <input type="email" name="editEmail" class="form-control" id="email" placeholder="Email*" />
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col mb-3">
+                            <label for="adminPassword" class="form-label">Pin Code</label>
+                            <input type="number" id="editPincode" class="form-control" placeholder="Pin Code*" />
+                            <label for="adminPassword" class="form-label">ADDRESS</label>
+
+                            <input type="text" id="editAddress" class="form-control"
+                                placeholder="Address(House No, Building, Street, Area*" />
+                            <input type="text" id="editLocality" class="form-control" placeholder="Localiy/Town*" />
+                            <div style="display: flex;">
+                                <input type="text" id="editCity" class="form-control" placeholder="City/ Dstrict*" />
+                                <input type="text" id="editState" class="form-control" placeholder="State*" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <label for="adminPassword" class="form-label">Save Address As</label>
+                        <div style="display: flex;">
+                            <input style="border-radius: 50px; width:75px ;color:black; hight:10px" type="radio"
+                                id="editHome" class="form-control" placeholder="Home" />
+                            <input style="border-radius: 50px;width:75px;color:black; hight:10px" type="radio" id="editWork"
+                                class="form-control" placeholder="work*" />
+                        </div>
+                    </div>
+
+                    <input type="checkbox" name="" id=""> Make this my deffualt address
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button id="saveEditBtn" class="btn btn-primary">Save Changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+    var editBtn = document.getElementById('editbtn');
+    var editModal = new bootstrap.Modal(document.getElementById('editModal'));
+    var saveEditBtn = document.getElementById('saveEditBtn');
+    var editNameInput = document.getElementById('editName');
+    var editMobileNoInput = document.getElementById('editMobileNo');
+    var editEmailInput = document.getElementById('editEmail');
+    var editPincodeInput = document.getElementById('editPincode');
+    var editAddressInput = document.getElementById('editAddress');
+    var editLocalityInput = document.getElementById('editLocality');
+        var editCityInput = document.getElementById('editCity');
+    var editStateInput = document.getElementById('editState');
+    var editHomeInput = document.getElementById('editHome');
+
+
+
+    
+
+
+    if (editBtn && editModal && saveEditBtn) {
+        editBtn.addEventListener('click', () => {
+          
+            const currentName = document.querySelector('#defaultAddress h3').textContent;
+            editNameInput.value = currentName;
+              editMobileNoInput.value = currentMobileNo;
+            editEmailInput.value = currentEmail;
+            editPincodeInput.value = currentPincode;
+            editAddressInput.value = currentAddress;
+            editLocalityInput.value = currentLocality;
+            editCityInput.value = currentCity;
+            editStateInput.value = currentState;
+            editHomeInput.value = currentHome;
+            editModal.show();
+        });
+
+        saveEditBtn.addEventListener('click', async () => {
+            try {
+                const editedName = editNameInput.value;
+                const editMobileNo = editMobileNoInput.value;
+                const editEmail = editEmailInput.value;
+                const editPincode = editPincodeInput.value;
+                const editAddress = editAddressInput.value;
+                const editLocality = editLocalityInput.value;
+                const editCity = editCityInput.value;
+                const editState = editStateInput.value;
+                const editHome = editHomeInput.value;
+
+
+                await axios.put(`/profile/{{profile._id}}`, { name: editedName });
+           
+                editModal.hide();
+                
+                location.reload();
+            } catch (error) {
+                console.error('Error saving changes:', error);
+            }
+        });
+    }
+});
+
+function deleteProfile(profileId) {
+    try {
+        if (!profileId) {
+            console.error('profileId is undefined or null.');
+            return;
+        }
+
+        axios.delete(`/users/profile/${profileId}`)
+            .then(() => {
+                console.log('Profile deleted successfully');
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error deleting profile:', error);
+            });
+    } catch (error) {
+        console.error('An error occurred:', error);
+    }
+}
+
+</script>
+
 
     <hr class="mb-4">
     <footer class="my-5 pt-5 text-muted text-center text-small">
