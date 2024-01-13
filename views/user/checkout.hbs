@@ -178,7 +178,7 @@
     </div>
     </div>
 
-<div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
+    <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -250,75 +250,75 @@
 
 
     <script>
-      document.addEventListener('DOMContentLoaded', function () {
-        const submitAddressBtn = document.getElementById('submitAddressBtn');
+        document.addEventListener('DOMContentLoaded', function () {
+            const submitAddressBtn = document.getElementById('submitAddressBtn');
 
-        if (submitAddressBtn) {
-            submitAddressBtn.addEventListener('click', async () => {
-                resetErrorMessages();
+            if (submitAddressBtn) {
+                submitAddressBtn.addEventListener('click', async () => {
+                    resetErrorMessages();
 
-                if (validateForm()) {
-                    try {
-                        const name = document.getElementById('name').value;
-                        const email = document.getElementById('email').value;
-                        const mobileNo = document.getElementById('mobileNo').value;
-                        const pinCode = document.getElementById('pincode').value;
-                        const address = document.getElementById('address').value;
-                        const locality = document.getElementById('locality').value;
-                        const city = document.getElementById('city').value;
-                        const state = document.getElementById('state').value;
-                        const saveAddressAs = document.getElementById('home').checked ? 'Home' : 'Work';
+                    if (validateForm()) {
+                        try {
+                            const name = document.getElementById('name').value;
+                            const email = document.getElementById('email').value;
+                            const mobileNo = document.getElementById('mobileNo').value;
+                            const pinCode = document.getElementById('pincode').value;
+                            const address = document.getElementById('address').value;
+                            const locality = document.getElementById('locality').value;
+                            const city = document.getElementById('city').value;
+                            const state = document.getElementById('state').value;
+                            const saveAddressAs = document.getElementById('home').checked ? 'Home' : 'Work';
 
-                        
-                        modal.show();
 
-                        const response = await axios.post('/users/profile', {
-                            name,
-                            mobileNo,
-                            email,
-                            pinCode,
-                            address,
-                            locality,
-                            city,
-                            state,
-                            saveAddressAs,
-                        });
+                            modal.show();
 
-                        console.log('Address added:', response.data);
-                        modal.hide();
-                    } catch (error) {
-                        console.error('Error adding address:', error);
+                            const response = await axios.post('/users/profile', {
+                                name,
+                                mobileNo,
+                                email,
+                                pinCode,
+                                address,
+                                locality,
+                                city,
+                                state,
+                                saveAddressAs,
+                            });
+
+                            console.log('Address added:', response.data);
+                            modal.hide();
+                        } catch (error) {
+                            console.error('Error adding address:', error);
+                        }
                     }
-                }
-            });
-        }
-    });
+                });
+            }
+        });
 
- function validateName(name) {
+        function validateName(name) {
             return name.trim() !== '';
         }
 
-            function validateMobileNo(mobileNo) {
+        function validateMobileNo(mobileNo) {
             return /^[0-9]{10}$/.test(mobileNo);
         }
 
-            function validateEmail(email) {
+        function validateEmail(email) {
             return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
         }
 
-            function validatePincode(pincode) {
+        function validatePincode(pincode) {
             return /^[0-9]{6}$/.test(pincode);
         }
 
-            function validateAddress(address) {
+        function validateAddress(address) {
             return address.trim() !== '';
         }
 
-            function validateLocality(locality) {
+        function validateLocality(locality) {
             return locality.trim() !== '';
         }
 
-    function resetErrorMessages() {
+        function resetErrorMessages() {
             if (!validateName(nameInput.value)) {
                 showError(nameInput, 'Please enter a valid name.');
             }
@@ -353,13 +353,14 @@
 
             if (!validateRadio(homeRadio) && !validateRadio(workRadio)) {
                 showError(homeRadio, 'Please select Home or Work.');
-            showError(workRadio, 'Please select Home or Work.');
+                showError(workRadio, 'Please select Home or Work.');
             }
 
-            
+
             if (!hasErrors()) {
                 console.log('Form submitted successfully!');
-            }    }
+            }
+        }
 
     </script>
 
@@ -389,12 +390,84 @@
 
     </script>
 
-    <script>
+    {{!-- <script>
         <!-- Include this script after including the modal HTML in your document -->
-        <script>
-       
 
-    </script>
+        <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Your existing code before the edit functionality
+
+        const submitEditBtn = document.getElementById('submitEditBtn');
+        submitEditBtn.addEventListener('click', async () => {
+            try {
+                // Get updated data from the edit modal
+                const updatedData = {
+                name: document.getElementById('editedName').value,
+            mobileNo: document.getElementById('editedMobileNo').value,
+            email: document.getElementById('editedEmail').value,
+                    // Add other fields as needed
+                };
+
+            // Assuming you have a function to update the profile on the server using Axios
+            await updateProfileWithAxios(updatedData);
+
+            // Close the edit modal
+            $('#editModal').modal('hide');
+            } catch (error) {
+                console.error('Error updating profile:', error);
+            }
+        });
+
+            // More of your existing code after the edit functionality
+
+            // Your existing script for adding a new profile using Axios
+            const submitAddressBtn = document.getElementById('submitAddressBtn');
+        submitAddressBtn.addEventListener('click', async () => {
+            try {
+                const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const mobileNo = document.getElementById('mobileNo').value;
+            const pinCode = document.getElementById('pincode').value;
+            const address = document.getElementById('address').value;
+            const locality = document.getElementById('locality').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const saveAddressAs = document.getElementById('home').value;
+
+            // Assuming you have a function to add a new profile using Axios
+            await addNewProfileWithAxios({
+                name,
+                mobileNo,
+                email,
+                pinCode,
+                address,
+                locality,
+                city,
+                state,
+                saveAddressAs,
+                });
+
+            // Close the add address modal
+            $('#adminModal').modal('hide');
+            } catch (error) {
+                console.error('Error adding address:', error);
+            }
+        });
+    });
+
+            // Function to update profile using Axios
+            async function updateProfileWithAxios(updatedData) {
+        const userId = {{/* get userId */}};
+            await axios.put(`/profile/${userId}`, updatedData);
+        console.log('Profile updated successfully');
+    }
+
+    async function addNewProfileWithAxios(profileData) {
+        await axios.post('/users/profile', profileData);
+        console.log('Address added successfully');
+    }
+    </script> --}}
+
 
 
     <hr class="mb-4">

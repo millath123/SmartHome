@@ -258,14 +258,28 @@ router.post('/profile', async (req, res) => {
 });
 
 
-router.delete('/profile/:userId', async (req, res) => {
+router.delete('/profile/:profileId', async (req, res) => {
   try {
-      const userId = req.params.userId;
-      await Profile.findOneAndDelete({ userId });
+      const profileId = req.params.profileId;
+      await Profile.findOneAndDelete({ _id: profileId });
       res.status(204).send();
   } catch (err) {
       console.error(err);
       res.status(500).send('Error deleting profile');
+  }
+});
+
+
+router.put('/profile/:profileId', async (req, res) => {
+  try {
+      const profileId = req.params.profileId;
+      const updatedData = req.body; 
+      const updatedProfile = await Profile.findByIdAndUpdate(profileId, updatedData, { new: true });
+
+      res.json({ success: true, profile: updatedProfile });
+  } catch (error) {
+      console.error('Error updating profile:', error);
+      res.status(500).json({ success: false, error: 'Internal Server Error' });
   }
 });
 

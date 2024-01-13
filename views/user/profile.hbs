@@ -152,7 +152,7 @@
                             <p>{{profile.address}}</p>
                             <p>PinCode: {{profile.pinCode}}</p>
                             <p>{{profile.mobileNo}}</p>
-                            <button type="button" id="removebtn" onclick="deleteProfile()">REMOVE</button>
+                    <button type="button" id="removebtn" onclick="deleteProfile('{{profile._id}}')">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
@@ -242,6 +242,7 @@
     </div>
 
 
+
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             var submitAddressBtn = document.getElementById('submitAddressBtn');
@@ -286,28 +287,75 @@
 
     </script>
 
-    <script>
-        function deleteProfile() {
-            try {
-                const userId = "{{userToken}}";
-                if (!userId) {
-                    console.error('userId is undefined or null.');
-                    return;
-                }
-
-                axios.delete(`/usres/profile/${userId}`)
-                    .then(() => {
-                        console.log('Profile deleted successfully');
-                    })
-                    .catch(error => {
-                        console.error('Error deleting profile:', error);
-                    });
-            } catch (error) {
-                console.error('An error occurred:', error);
+<script>
+    function deleteProfile(profileId) {
+        try {
+            if (!profileId) {
+                console.error('profileId is undefined or null.');
+                return;
             }
-        }
-    </script>
 
+            axios.delete(`/users/profile/${profileId}`)
+                .then(() => {
+                    console.log('Profile deleted successfully');
+                })
+                .catch(error => {
+                    console.error('Error deleting profile:', error);
+                });
+        } catch (error) {
+            console.error('An error occurred:', error);
+        }
+    }
+</script>
+
+
+
+
+
+<script>
+    const submitAddressBtn = document.getElementById('submitAddressBtn');
+    submitAddressBtn.addEventListener('click', async () => {
+        try {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const mobileNo = document.getElementById('mobileNo').value;
+            const pinCode = document.getElementById('pincode').value;
+            const address = document.getElementById('address').value;
+            const locality = document.getElementById('locality').value;
+            const city = document.getElementById('city').value;
+            const state = document.getElementById('state').value;
+            const saveAddressAs = document.getElementById('home').value;
+
+            await addNewProfileWithAxios({
+                name,
+                mobileNo,
+                email,
+                pinCode,
+                address,
+                locality,
+                city,
+                state,
+                saveAddressAs,
+            });
+
+            $('#adminModal').modal('hide');
+        } catch (error) {
+            console.error('Error adding address:', error);
+        }
+    });
+
+    async function updateProfileWithAxios(updatedData) {
+        // Assuming profileId is available in the HTML or fetched from the server
+        const profileId = {{profileId}};
+        await axios.put(`/profile/${profileId}`, updatedData);
+        console.log('Profile updated successfully');
+    }
+
+    async function addNewProfileWithAxios(profileData) {
+        await axios.post('/users/profile', profileData);
+        console.log('Address added successfully');
+    }
+</script>
 
     <hr class="mb-4">
     <footer class="my-5 pt-5 text-muted text-center text-small">
