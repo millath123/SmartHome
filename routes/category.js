@@ -48,7 +48,7 @@ router.post('/upload', upload.single('image'), async (req, res) => {
   }
 });
 
-// //category edit
+////category edit
 router.get('/:categoryId/edit', async (req, res) => {
   try {
     const { categoryId } = req.params;
@@ -76,8 +76,5 @@ router.put('/:categoryId', async (req, res) => {
     res.status(500).json({ error: 'Error updating category' });
   }
 });
-
-
-
 
 module.exports = router;

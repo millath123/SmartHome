@@ -16,18 +16,8 @@ router.get('/checkout', async (req, res) => {
         const productData = await Product.find({ _id: productIds });
         const profile = await Profile.find({ userId: user._id });
 
-        // let profileIds = [];
-
-        // if (profile && profile.length > 0) {
-        //     profileIds = profile.map(item => item.profileId);
-        //     console.log(profileIds);
-        // } else {
-        //     console.log("No profile found for this user.");
-        // }
-
-        // Rest of your code
-
-        res.render(path.join(__dirname, '../views/user/checkout'), {cart: cartItems,product: productData, profile });
+console.log(cartItems);
+        res.render(path.join(__dirname, '../views/user/checkout'), {cart: cartItems,product: productData, profile,user });
     } catch (error) {
         console.error(error);
         res.status(500).send('Internal Server Error');
@@ -44,7 +34,9 @@ router.delete('/checkout/:profileId', async (req, res) => {
         res.status(500).send('Error deleting profile');
     }
   });
- 
+
+
+
 
 //   router.post('/checkout', async (req, res) => {
 //     const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;  

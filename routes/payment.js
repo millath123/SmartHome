@@ -16,13 +16,15 @@ router.get('/', async function (req, res, next) {
 });
 
 router.get('/orderplaced', async function (req, res, next) {
+    
     res.render(path.join(__dirname, '../views/user/orderplaced'));
 });
 
 router.post('/placeorder', async function (req, res, next) {
     try {
-    
         const { userId, profileId, productId, cartId, paymentMethod } = req.body;
+
+        console.log('Received data:', req.body);
 
         const newOrder = new Order({
             userId,
@@ -40,5 +42,7 @@ router.post('/placeorder', async function (req, res, next) {
         res.status(500).send('Internal Server Error');
     }
 });
+
+
 
 module.exports = router;
