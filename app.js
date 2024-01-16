@@ -14,6 +14,8 @@ const categoryroutes = require('./routes/category');
 const cartroutes = require('./routes/cart');
 const checkoutroutes = require('./routes/checkout');
 
+const paymentroutes = require('./routes/payment');
+
 // const profileroutes = require('./routes/profile');
 
 
@@ -53,6 +55,8 @@ app.use('/product',productroutes);
 app.use('/category',categoryroutes);
 app.use('/cart',cartroutes);
 app.use('/',checkoutroutes);
+app.use('/payment',paymentroutes);
+
 
 // app.use('/profile',profileroutes);
 

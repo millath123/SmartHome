@@ -44,6 +44,7 @@ router.delete('/checkout/:profileId', async (req, res) => {
         res.status(500).send('Error deleting profile');
     }
   });
+ 
 
 //   router.post('/checkout', async (req, res) => {
 //     const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;  
@@ -76,7 +77,6 @@ router.delete('/checkout/:profileId', async (req, res) => {
 //  Fetch user profile details by email
 //   router.get('/profile/:email', async (req, res) => {
 //     const userEmail = req.params.email;
-
 //     try {
 //       const userProfile = await Profile.findOne({ email: userEmail });
 
