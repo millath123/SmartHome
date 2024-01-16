@@ -36,8 +36,6 @@ router.delete('/checkout/:profileId', async (req, res) => {
   });
 
 
-
-
 //   router.post('/checkout', async (req, res) => {
 //     const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;  
 //     try {
@@ -82,6 +80,7 @@ router.delete('/checkout/:profileId', async (req, res) => {
 //       res.status(500).send('Error fetching user profile');
 //     }
 //   });
+
 
 module.exports = router;
 

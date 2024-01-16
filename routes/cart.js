@@ -5,6 +5,7 @@ const Product = require('../model/productmodel');
 const Cart = require('../model/cartmodel');
 const User = require('../model/usermodel');
 const jwt = require('jsonwebtoken');
+const Profile = require('../model/profile');
 
 
 
@@ -62,9 +63,11 @@ router.post('/addToCart', async (req, res) => {
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
     let cart = await Cart.findOne({ userId: user._id, productId: productId });
+    let profile = await Profile.findOne({ profileId: profile._id});
 
     if (cart) {
       cart.quantity += 1;
+      
     } else {
       cart = new Cart({
         userId: user._id,

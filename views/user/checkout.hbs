@@ -1089,7 +1089,8 @@
                                             </li>
                                             <li class="wc_payment_method payment_method_cod">
                                                 <input id="payment_method_cod" type="radio" class="input-radio"
-                                                    name="payment_method" value="cash on delivery" data-order_button_text="" />
+                                                    name="payment_method" value="cash on delivery"
+                                                    data-order_button_text="" />
 
 
                                                 <label for="payment_method_cod">
@@ -1150,46 +1151,45 @@
     </div>
 
     <script>
-   document.addEventListener('DOMContentLoaded', function () {
-    let selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
+        document.addEventListener('DOMContentLoaded', function () {
+            let selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
 
-    document.querySelectorAll('input[name="payment_method"]').forEach(function (radio) {
-        radio.addEventListener('change', function () {
-            selectedPaymentMethod = this.value;
-        });
-    });
-
-    document.getElementById('place_order_link').addEventListener('click', function (event) {
-        event.preventDefault();
-        const requestBody = {
-            userId: "{{{user._id}}}",
-            profileId: "{{{profile._id}}}",
-            productId: "{{{product._id}}}",
-            cartId: "{{{cart._id}}}",
-            paymentMethod: selectedPaymentMethod
-        };
-
-        fetch('/payment/placeorder', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(requestBody),
-        })
-            .then(response => {
-                if (response.ok) {
-                    console.log('Order placed successfully!');
-                    window.location.href = '/payment/orderplaced';
-                } else {
-                    console.error('Failed to place order.');
-                }
-            })
-            .catch(error => {
-                console.error('Error placing order:', error);
+            document.querySelectorAll('input[name="payment_method"]').forEach(function (radio) {
+                radio.addEventListener('change', function () {
+                    selectedPaymentMethod = this.value;
+                });
             });
-    });
-});
 
+            document.getElementById('place_order_link').addEventListener('click', function (event) {
+                event.preventDefault();
+                const requestBody = {
+                    userId: "{{{user._id}}}",
+                    profileId: "{{{profile._id}}}",
+                    productId: "{{{product._id}}}",
+                    cartId: "{{{cart._id}}}",
+                    paymentMethod: selectedPaymentMethod
+                };
+
+                fetch('/payment/placeorder', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(requestBody),
+                })
+                    .then(response => {
+                        if (response.ok) {
+                            console.log('Order placed successfully!');
+                            window.location.href = '/payment/orderplaced';
+                        } else {
+                            console.error('Failed to place order.');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error placing order:', error);
+                    });
+            });
+        });
     </script>
 
     {{!--

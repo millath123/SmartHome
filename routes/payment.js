@@ -6,6 +6,7 @@ const Cart = require('../model/cartmodel');
 const User = require('../model/usermodel');
 const Profile = require('../model/profile');
 const Order = require('../model/ordercollection');
+const razorpay=require ('razorpay');
 
 
 
@@ -44,5 +45,19 @@ router.post('/placeorder', async function (req, res, next) {
 });
 
 
+/////razorpay method
+
+var instance = new Razorpay({
+    key_id: 'YOUR_KEY_ID',
+    key_secret: 'YOUR_KEY_SECRET',
+  });
+
+
+  router.get('/razorpay', async function (req, res, next) {
+    e
+    res.render(path.join(__dirname, '../views/user/orderplaced'));
+});
+
+rout
 
 module.exports = router;
