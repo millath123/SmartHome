@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 
 
 const banerSchema = new mongoose.Schema({
-
     image:String,
     advataisement:String,
     description:String,
