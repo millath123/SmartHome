@@ -6,7 +6,7 @@ const Cart = require('../model/cartmodel');
 const User = require('../model/usermodel');
 const Profile = require('../model/profile');
 const Order = require('../model/ordercollection');
-const razorpay=require ('razorpay');
+const Razorpay =require ('razorpay');
 
 
 
@@ -48,16 +48,27 @@ router.post('/placeorder', async function (req, res, next) {
 /////razorpay method
 
 var instance = new Razorpay({
-    key_id: 'YOUR_KEY_ID',
-    key_secret: 'YOUR_KEY_SECRET',
+    key_id: 'rzp_test_loT5kImmE5sM43',
+    key_secret: 'QmRczEgUqbFjliBVuOFD6EqS',
   });
 
 
   router.get('/razorpay', async function (req, res, next) {
-    e
-    res.render(path.join(__dirname, '../views/user/orderplaced'));
+
+    res.render(path.join(__dirname, '../views/user/razorpay'));
 });
 
-rout
+router.post('/orderId', async function (req, res, next) {
+console.log("create orderId request",req.body);
+var options = {
+    amount: req.body.amount,  
+    currency: "INR",
+    receipt: "order_rcptid_11"
+  };
+  instance.orders.create(options, function(err, order) {
+    console.log(order);
+    res.send({orderId : order.id})
+  });
+});
 
 module.exports = router;
