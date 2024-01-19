@@ -13,8 +13,8 @@ const productroutes = require('./routes/product');
 const categoryroutes = require('./routes/category');
 const cartroutes = require('./routes/cart');
 const checkoutroutes = require('./routes/checkout');
-
 const paymentroutes = require('./routes/payment');
+const bannerroutes = require('./routes/banner')
 
 // const profileroutes = require('./routes/profile');
 
@@ -56,6 +56,7 @@ app.use('/category',categoryroutes);
 app.use('/cart',cartroutes);
 app.use('/',checkoutroutes);
 app.use('/payment',paymentroutes);
+app.use('')
 
 
 // app.use('/profile',profileroutes);
