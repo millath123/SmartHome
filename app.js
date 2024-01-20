@@ -56,7 +56,7 @@ app.use('/category',categoryroutes);
 app.use('/cart',cartroutes);
 app.use('/',checkoutroutes);
 app.use('/payment',paymentroutes);
-app.use('/banner',bannerroutes)
+app.use('/',bannerroutes)
 
 
 // app.use('/profile',profileroutes);

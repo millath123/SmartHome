@@ -2,13 +2,13 @@ const express = require('express');
 const router = express.Router();
 const cloudinary = require('../config/cloudinary');
 const multer = require('multer');
+const path = require("path");
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Banner = require('../model/banner');
 
 
 
-router.get('/banner',async function(req, res, next) {
-
+router.get('/',async function(req, res, next) {
     res.render(path.join(__dirname,'../views/admin/banner'));
   });
 
@@ -43,5 +43,6 @@ router.post('/addBanner', parser.single('image'), async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
+
 
 module.exports = router;

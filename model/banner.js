@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 
-
 const banerSchema = new mongoose.Schema({
     bannerImage:String,
     bannerProduct:String,

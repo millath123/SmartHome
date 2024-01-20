@@ -25,7 +25,7 @@ $(document).ready(function () {
             "Content-Type": "application/json"
         },
         "data": JSON.stringify({
-            "amount": "50000"
+            "amount": {orderId}
         }),
     };
 
@@ -38,7 +38,7 @@ $(document).ready(function () {
     document.getElementById('rzp-button1').onclick = function (e) {
         var options = {
             "key": "rzp_test_loT5kImmE5sM43", // Enter the Key ID generated from the Dashboard
-            "amount": "50000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "amount": {orderId}, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": "Acme Corp",
             "description": "Test Transaction",

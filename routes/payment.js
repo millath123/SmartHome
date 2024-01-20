@@ -44,7 +44,6 @@ router.post('/placeorder', async function (req, res, next) {
     }
 });
 
-
 /////razorpay method
 
 var instance = new Razorpay({
