@@ -5,29 +5,33 @@ const multer = require('multer');
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const Banner = require('../model/banner');
 
-// Configure Cloudinary storage for multer
+
+
+router.get('/banner',async function(req, res, next) {
+
+    res.render(path.join(__dirname,'../views/admin/banner'));
+  });
+
 const storage = new CloudinaryStorage({
     cloudinary: cloudinary,
     params: {
-        folder: 'banners',
-        format: async (req, file) => 'png', 
-        public_id: (req, file) => `banner_${Date.now()}`, 
+        folder: 'uploads',
+        allowed_formats: ['jpg', 'png', 'jpeg'],
     },
 });
-
 const parser = multer({ storage: storage });
 
 router.post('/addBanner', parser.single('image'), async (req, res) => {
     try {
-        const { advataisement, description, price } = req.body;
+        const { bannerProduct, bannerAnnouncement, bannerDescription, bannerPrice } = req.body;
 
-        const image = req.file ? req.file.path : ''; 
+        const bannerImage = req.file ? req.file.path : ''; 
 
         const newBanner = new Banner({
             bannerImage,
+            bannerProduct,
             bannerAnnouncement,
             bannerDescription,
-            bannerProduct,
             bannerPrice,
         });
 

@@ -143,11 +143,14 @@
         <li>
           <a href="/admin/users"><span class="fa fa-users mr-3 notif"></span> USERS</a>
         </li>
-          <li>
+        <li>
           <a href="/admin/category"><span class="fa fa-trophy mr-3"></span>CATEGORY</a>
         </li>
         <li>
           <a href="/admin/product"><span class="fa fa-th mr-3"></span>PRODUCTS</a>
+        </li>
+        <li>
+          <a href="/admin/banner"><span class="fa fa-cog mr-3"></span> BANNERS</a>
         </li>
         <li>
           <a href="#"><span class="fa fa-trophy mr-3"></span> Top Review</a>
@@ -194,7 +197,8 @@
               <td>{{this.productPrice}}</td>
               <td>{{this.productQuantity}}</td>
               <td>
-                <button class="btn custom-view-button" onclick="viewProduct('{{this.id}}','{{this.productName}}','{{this.productDescription}}','{{this.productCategory}}',
+                <button class="btn custom-view-button"
+                  onclick="viewProduct('{{this.id}}','{{this.productName}}','{{this.productDescription}}','{{this.productCategory}}',
     '{{this.productBrand}}','{{this.productConnectivity}}','{{this.productColor}}','{{this.productPrice}}','{{this.productQuantity}}')">
                   <i class="fa fa-eye" aria-hidden="true"></i>
                 </button>
@@ -323,7 +327,8 @@
     <script>
       function openAddProductModal() {
         var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
-        modal.show();}
+        modal.show();
+      }
 
       function closeAddProductModal() {
         var modal = new bootstrap.Modal(document.getElementById('exampleModal'));
@@ -453,7 +458,7 @@
                 <label class="form-label" for="customFile">Image</label>
                 <input type="file" class="form-control" id="editProductImage" name="images" value="" multiple>
               </div>
-              
+
               <div class="custom-file">
                 <label class="form-label" for="customFile">Image</label>
                 <input type="file" class="form-control" id="editProductImage" name="images" value="" multiple>
@@ -663,4 +668,5 @@
     <script src="../assets/js/main.js"></script>
 
 </body>
+
 </html>

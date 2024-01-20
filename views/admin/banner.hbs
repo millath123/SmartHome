@@ -151,6 +151,9 @@
                     <a href="/admin/product"><span class="fa fa-th mr-3"></span>PRODUCTS</a>
                 </li>
                 <li>
+                    <a href="/admin/banner"><span class="fa fa-cog mr-3"></span> BANNERS</a>
+                </li>
+                <li>
                     <a href="#"><span class="fa fa-trophy mr-3"></span> Top Review</a>
                 </li>
                 <li>
@@ -334,7 +337,7 @@
                     isValid = false;
                 }
 
-              
+
                 if (bannerPrice.trim() === '') {
                     displayErrorMessage('bannerPrice', 'Please enter product price');
                     isValid = false;
@@ -343,7 +346,7 @@
                     isValid = false;
                 }
 
-               
+
 
                 if (!isValid) {
                     return;
@@ -355,7 +358,7 @@
                     bannerAnnouncement,
                     bannerDescription,
                     bannerPrice,
-               
+
                 })
                     .then(response => {
                         console.log('Banner added successfully:', response.data);
@@ -391,8 +394,7 @@
                             </div>
                             <div class="custom-file">
                                 <label class="form-label" for="customFile">Image</label>
-                                <input type="file" class="form-control" id="editBannerImage" name="images" value=""
-                                    >
+                                <input type="file" class="form-control" id="editBannerImage" name="images" value="">
                             </div>
 
                             <div class="custom-file">
@@ -417,8 +419,8 @@
 
                             <div class="mb-3">
                                 <label for="bannerAnnouncement" class="form-label">Announcement</label>
-                                <input type="text" class="form-control" id="editBannerAnnouncement" name="bannerAnnouncement"
-                                    value="{{this.productCategory}}">
+                                <input type="text" class="form-control" id="editBannerAnnouncement"
+                                    name="bannerAnnouncement" value="{{this.productCategory}}">
                                 <div id="bannerAnnouncementError" class="error-message"></div>
                             </div>
 
@@ -430,7 +432,7 @@
                                 <div id="bannerPriceError" class="error-message"></div>
                             </div>
 
-                          
+
 
                             <div class="modal-footer">
                                 <button type="submit" class="btn btn-primary">Save</button>
@@ -457,7 +459,7 @@
                     $('#editBannerAnnouncement').val(bannerAnnouncement);
                 $('#editBannerDescription').val(bannerDescription);
                 $('#editbannerPrice').val(bannerPrice);
-               
+
                 var editBannerModal = new bootstrap.Modal(document.getElementById('editBannerModal'));
                 editBannerModal.show();
 
@@ -532,21 +534,18 @@
             function viewBanner(
                 id,
                 bannerImage,
-                productName,
-                productDescription,
-                productCategory,
-                productBrand,
-                productConnectivity,
-                productColor,
-                productPrice,
-                productQuantity
+                bannerProduct,
+                bannerAnnouncement,
+                bannerDescription,
+                bannerPrice,
+
             ) {
                 $('#editBnnerImage').val(bannerImage);
                 $('#editBannerProduct').val(bannerProduct);
                 $('#editBannerAnnouncement').val(bannerAnnouncement);
                 $('#editBannerDescription').val(bannerDescription);
                 $('#editbannerPrice').val(bannerPrice);
-             
+
 
                 $('#editBannerModal').modal('show'); // Show the modal
             }
