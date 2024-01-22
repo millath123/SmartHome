@@ -11,7 +11,6 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
 
-
 <script>
 var orderId;
 $('button').hide();
@@ -37,13 +36,13 @@ $(document).ready(function () {
 
     document.getElementById('rzp-button1').onclick = function (e) {
         var options = {
-            "key": "rzp_test_loT5kImmE5sM43", // Enter the Key ID generated from the Dashboard
-            "amount": {orderId}, // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+            "key": "rzp_test_loT5kImmE5sM43", //Enter the Key ID generated from the Dashboard
+            "amount": {orderId}, //Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
             "currency": "INR",
             "name": "Acme Corp",
             "description": "Test Transaction",
             "image": "https://example.com/your_logo",
-            "order_id": orderId, // Use the orderId obtained from the response of the AJAX call
+            "order_id": orderId, //Use the orderId obtained from the response of the AJAX call
             "handler": function (response) {
                 alert(response.razorpay_payment_id);
                 alert(response.razorpay_order_id);
@@ -68,8 +67,8 @@ $(document).ready(function () {
         e.preventDefault();
     };
 });
-
 </script>
+
 
 
 </body>
