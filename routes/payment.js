@@ -7,7 +7,7 @@ const User = require('../model/usermodel');
 const Profile = require('../model/profile');
 const Order = require('../model/ordercollection');
 const Razorpay =require ('razorpay');
-
+require('dotenv').config();
 
 
 
@@ -51,23 +51,33 @@ var instance = new Razorpay({
     key_secret: 'QmRczEgUqbFjliBVuOFD6EqS',
   });
 
-
-  router.get('/razorpay', async function (req, res, next) {
+router.get('/razorpay', async function (req, res, next) {
 
     res.render(path.join(__dirname, '../views/user/razorpay'));
 });
 
-router.post('/orderId', async function (req, res, next) {
-console.log("create orderId request",req.body);
-var options = {
-    amount: req.body.amount,  
-    currency: "INR",
-    receipt: "order_rcptid_11"
-  };
-  instance.orders.create(options, function(err, order) {
-    console.log(order);
-    res.send({orderId : order.id})
+router.post('/create-razorpay-order',auth, async (req, res) => {
+    try {
+      const { orderId, amount } = req.body;
+      const razorpayOptions = {
+        key: process.env.PAY_KEY,
+        amount: amount * 100,
+        currency: 'INR',
+        name: 'Your Company Name',
+        description: 'Payment for Order',
+        image: 'your_company_logo_url',
+        prefill: {
+          name: 'Customer Name',
+          email: 'customer@example.com',
+          contact: '1234567890',
+        },
+      };
+  
+      res.json({ razorpayOptions });
+    } catch (error) {
+      res.status(500).send(error);
+    }
   });
-});
+  
 
 module.exports = router;

@@ -35,11 +35,12 @@ router.delete('/checkout/:profileId', async (req, res) => {
     }
   });
 
+  
 
 //   router.post('/checkout', async (req, res) => {
 //     const { name, mobileNo, email, pinCode, address, locality, city, state, saveAddressAs } = req.body;  
 //     try {
-//       const existingUser = await Checkout.findOne({ email });
+//   const existingUser = await Checkout.findOne({ email });
 
 //       if (existingUser) {
 //         return res.status(400).se`d('Email is already in use. Please use a  different email.');

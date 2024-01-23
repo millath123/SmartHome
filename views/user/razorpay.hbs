@@ -54,7 +54,8 @@ $(document).ready(function () {
         };
 
         var rzp1 = new Razorpay(options);
-        rzp1.on('payment.failed', function (response) {
+        rzp1.on('payment.failed', funct
+        ion (response) {
             alert(response.error.code);
             alert(response.error.description);
             alert(response.error.source);

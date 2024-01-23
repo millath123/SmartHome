@@ -838,7 +838,9 @@
                                         <div class="row" style="display: flex;">
                                             <div class="small-12 medium-7 columns thb-checkout-form-column">
                                                 <div class="col2-set" id="customer_details">
-                                                    <!-- ******************************************************************************** -->
+
+
+                                                    <!-- *********************************************************************************************************************************************************************** -->
 
                                                     <h5>Select Delivery Address</h5>
                                                     <button type="button" id="showAdminModalBtn"
@@ -890,10 +892,7 @@
                                                     +ADD NEW ADDRESS
                                                 </div> --}}
                                             </div>
-
                                         </div>
-
-
                                     </div>
 
 
@@ -1151,46 +1150,64 @@
     </div>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let selectedPaymentMethod = document.querySelector('input[name="payment_method"]:checked').value;
-
-            document.querySelectorAll('input[name="payment_method"]').forEach(function (radio) {
-                radio.addEventListener('change', function () {
-                    selectedPaymentMethod = this.value;
-                });
-            });
-
-            document.getElementById('place_order_link').addEventListener('click', function (event) {
-                event.preventDefault();
-                const requestBody = {
-                    userId: "{{{user._id}}}",
-                    profileId: "{{{profile._id}}}",
-                    productId: "{{{product._id}}}",
-                    cartId: "{{{cart._id}}}",
-                    paymentMethod: selectedPaymentMethod
-                };
-
-                fetch('/payment/placeorder', {
+        async function payNow(orderId, amount) {
+            try {
+                const response = await fetch('/create-razorpay-order', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify(requestBody),
-                })
-                    .then(response => {
-                        if (response.ok) {
-                            console.log('Order placed successfully!');
-                            window.location.href = '/payment/orderplaced';
+                    body: JSON.stringify({
+                        amount: amount,
+                    }),
+                });
+
+                if (!response.ok) {
+                    console.error('Failed to create Razorpay order:', response.statusText);
+                    return;
+                }
+
+                const { razorpayOptions } = await response.json();
+                const razorpay = new Razorpay({
+                    ...razorpayOptions,
+                    handler: async function (response) {
+                        if (response.razorpay_payment_id) {
+                            try {
+                                const updateResponse = await fetch('/pay', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/json',
+                                    },
+                                    body: JSON.stringify({
+                                        objId: orderId,
+                                        payId: response.razorpay_payment_id,//Corrected variable name
+                                    }),
+                                });
+
+                                if (!updateResponse.ok) {
+                                    console.error('Failed to update payment status:', updateResponse.statusText);
+                                    return;
+                                }
+                            } catch (e) {
+                                console.error('Failed to update payment status:', e);
+                            }
+
+                            // Additional logic for successful payment
+                            window.location.reload();
                         } else {
-                            console.error('Failed to place order.');
+                            console.error('Payment failed:', response.error_description);
+                            alert('Payment failed. Please try again.');
                         }
-                    })
-                    .catch(error => {
-                        console.error('Error placing order:', error);
-                    });
-            });
-        });
+                    },
+                });
+                razorpay.open();
+
+            } catch (error) {
+                console.error('Error initiating payment:', error);
+            }
+        }
     </script>
+
 
     {{!--
     *********************************************************************************************************************************************
@@ -1422,7 +1439,7 @@
             document.body.className = c;
         })();
     </script>
-    
+
     <script type='text/javascript' src='https://c0.wp.com/p/jetpack/12.1.1/_inc/build/photon/photon.min.js'
         id='jetpack-photon-js'></script>
     {{!--
