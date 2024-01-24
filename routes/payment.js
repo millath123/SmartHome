@@ -10,7 +10,6 @@ const Razorpay =require ('razorpay');
 require('dotenv').config();
 
 
-
 router.get('/', async function (req, res, next) {
 
     res.render(path.join(__dirname, '../views/user/payment'));
@@ -44,7 +43,8 @@ router.post('/placeorder', async function (req, res, next) {
     }
 });
 
-/////razorpay method
+
+/////  razorpay method
 
 var instance = new Razorpay({
     key_id: 'rzp_test_loT5kImmE5sM43',
@@ -56,7 +56,9 @@ router.get('/razorpay', async function (req, res, next) {
     res.render(path.join(__dirname, '../views/user/razorpay'));
 });
 
-router.post('/create-razorpay-order',auth, async (req, res) => {
+
+
+router.post('/create-razorpay-order', async (req, res) => {
     try {
       const { orderId, amount } = req.body;
       const razorpayOptions = {
@@ -78,6 +80,5 @@ router.post('/create-razorpay-order',auth, async (req, res) => {
       res.status(500).send(error);
     }
   });
-  
 
 module.exports = router;

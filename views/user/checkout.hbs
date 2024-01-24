@@ -1149,6 +1149,8 @@
     </div>
     </div>
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
     <script>
         async function payNow(orderId, amount) {
             try {
@@ -1180,7 +1182,7 @@
                                     },
                                     body: JSON.stringify({
                                         objId: orderId,
-                                        payId: response.razorpay_payment_id,//Corrected variable name
+                                        payId: response.razorpay_payment_id, //Corrected variable name
                                     }),
                                 });
 

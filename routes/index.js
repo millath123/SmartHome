@@ -6,6 +6,7 @@ const Cart = require('../model/cartmodel');
 const User = require('../model/usermodel');
 
 
+
 router.get('/',async function(req, res, next) {
 
   res.render(path.join(__dirname,'../views/admin/login'));
