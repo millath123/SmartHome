@@ -75,7 +75,6 @@ router.post('/addToCart', async (req, res) => {
         quantity: 1
       });
     }
-
     await cart.save();
     res.status(200).json({ success: true, message: 'Product added to cart' });
   } catch (error) {
@@ -84,11 +83,12 @@ router.post('/addToCart', async (req, res) => {
   }
 });
 
-
 ///delete from cart
+
 router.delete('/delete/:productId', async (req, res) => {
   const productId = req.params.productId;
   try {
+
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
 

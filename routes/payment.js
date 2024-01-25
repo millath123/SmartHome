@@ -26,6 +26,33 @@ router.post('/placeorder', async function (req, res, next) {
 
         console.log('Received data:', req.body);
 
+        if (paymentMethod === 'cashOnDelivery') {
+     
+            console.log('Processing Cash on Delivery');
+        } else if (paymentMethod === 'razorpay') {
+            // Process Razorpay
+            const { amount } = req.body; // Extract amount from the request body
+
+            const razorpayOptions = {
+                key: process.env.PAY_KEY, // Update with your actual environment variable
+                amount: amount * 100,
+                currency: 'INR',
+                name: 'Your Company Name',
+                description: 'Payment for Order',
+                image: 'your_company_logo_url',
+                prefill: {
+                    name: 'Customer Name',
+                    email: 'customer@example.com',
+                    contact: '1234567890',
+                },
+            };
+
+            return res.json({ razorpayOptions });
+        } else {
+            // Handle other payment methods if needed
+            console.log('Processing other payment methods');
+        }
+
         const newOrder = new Order({
             userId,
             profileId,
@@ -43,42 +70,9 @@ router.post('/placeorder', async function (req, res, next) {
     }
 });
 
-
-/////  razorpay method
-
-var instance = new Razorpay({
-    key_id: 'rzp_test_loT5kImmE5sM43',
-    key_secret: 'QmRczEgUqbFjliBVuOFD6EqS',
-  });
-
+// Route for rendering the Razorpay view
 router.get('/razorpay', async function (req, res, next) {
-
     res.render(path.join(__dirname, '../views/user/razorpay'));
 });
-
-
-
-router.post('/create-razorpay-order', async (req, res) => {
-    try {
-      const { orderId, amount } = req.body;
-      const razorpayOptions = {
-        key: process.env.PAY_KEY,
-        amount: amount * 100,
-        currency: 'INR',
-        name: 'Your Company Name',
-        description: 'Payment for Order',
-        image: 'your_company_logo_url',
-        prefill: {
-          name: 'Customer Name',
-          email: 'customer@example.com',
-          contact: '1234567890',
-        },
-      };
-  
-      res.json({ razorpayOptions });
-    } catch (error) {
-      res.status(500).send(error);
-    }
-  });
 
 module.exports = router;
