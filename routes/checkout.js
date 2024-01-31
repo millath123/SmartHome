@@ -9,20 +9,45 @@ const Profile = require('../model/profile');
 
 router.get('/checkout', async (req, res) => {
     try {
-        const userToken = req.cookies.user_token;
-        let user = await User.findOne({ token: userToken });
-        const cartItems = await Cart.find({ userId: user._id });
-        const productIds = cartItems.map(item => item.productId);
-        const productData = await Product.find({ _id: productIds });
-        const profile = await Profile.find({ userId: user._id });
-
-console.log(cartItems);
-        res.render(path.join(__dirname, '../views/user/checkout'), {cart: cartItems,product: productData, profile,user });
+      const userToken = req.cookies.user_token;
+      let user = await User.findOne({ token: userToken });
+  
+      if (!user) {
+        return res.status(404).send('User not found');
+      }
+  
+      const cartItems = await Cart.findOne({ userId: user._id });
+  
+      if (!cartItems) {
+        return res.status(200).render(path.join(__dirname, '../views/user/checkout'), { cart: [], user, profile: null, grandTotal: 0 });
+      }
+  
+      const productIds = cartItems.products.map(product => product.productId);
+  
+      const productData = await Product.find({ _id: { $in: productIds } });
+      const profile = await Profile.find({ userId: user._id });
+  
+      let grandTotal = 0;
+  
+      // Merge product details into cartItems and calculate total price
+      const mergedCartItems = cartItems.products.map(product => {
+        const matchingProductData = productData.find(data => data._id.toString() === product.productId.toString());
+        const total = matchingProductData.productPrice * product.quantity;
+        grandTotal += total;
+        return { ...product, productData: matchingProductData, total };
+      });
+  
+      console.log(mergedCartItems);
+  
+      res.render(path.join(__dirname, '../views/user/checkout'), { cart: mergedCartItems, user, profile, grandTotal });
     } catch (error) {
-        console.error(error);
-        res.status(500).send('Internal Server Error');
+      console.error(error);
+      res.status(500).send('Internal Server Error');
     }
-});
+  });
+  
+  
+  
 
 router.delete('/checkout/:profileId', async (req, res) => {
     try {

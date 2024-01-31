@@ -7,49 +7,51 @@ const User = require('../model/usermodel');
 const jwt = require('jsonwebtoken');
 const Profile = require('../model/profile');
 
-
-
+// GET route to display the cart
 router.get('/', async (req, res, next) => {
   try {
     const userToken = req.cookies.user_token;
-    let user = await User.findOne({ token: userToken });
+    const user = await User.findOne({ token: userToken });
     
-    const cartItems = await Cart.find({ userId: user._id });
+    // Use aggregate to fetch cart data along with product details
+    const cartItems = await Cart.aggregate([
+      {
+        $match: { userId: user._id },
+      },
+      {
+        $unwind: '$products',
+      },
+      {
+        $lookup: {
+          from: 'products',
+          localField: 'products.productId',
+          foreignField: '_id',
+          as: 'productData',
+        },
+      },
+      {
+        $addFields: {
+          'products.productData': { $arrayElemAt: ['$productData', 0] },
+        },
+      },
+      {
+        $group: {
+          _id: '$_id',
+          userId: { $first: '$userId' },
+          products: { $push: '$products' },
+          __v: { $first: '$__v' },
+        },
+      },
+    ]);
 
-    const productIds = cartItems.map(item => item.productId);
-    const productData = await Product.find({ _id: productIds });
-
-    res.render(path.join(__dirname, '../views/user/cart'), { cart: cartItems, product: productData });
+    res.render(path.join(__dirname, '../views/user/cart'), { cartItems: cartItems });
 
   } catch (error) {
     console.error('Error occurred:', error);
   }
 });
 
-///add to cart
-
-// router.post('/addToCart', async (req, res) => {
-//   const productId = req.body.productId;
-//   try {
-//     const product = await Product.findById(productId);
-//     if (!product) {
-//       return res.status(404).json({ error: 'Product not found' });
-//     }
-//     const userToken = req.cookies.user_token;
-//     let user = await User.findOne({ token: userToken });
-//     const cart = new Cart({
-//       userId: user._id,
-//       productId: product._id,
-//       quantity: 1
-//     })
-//     await cart.save();
-//     res.status(200).render(path.join(__dirname, '../views/user/cart'),{ cartadd : 'ok' });
-//   } catch (error) {
-//     console.error('Error adding product to cart:', error);
-//     res.status(500).json({ error: 'Failed to add product to cart' });
-//   }
-// });
-
+// POST route to add a product to the cart
 router.post('/addToCart', async (req, res) => {
   const productId = req.body.productId;
 
@@ -62,19 +64,29 @@ router.post('/addToCart', async (req, res) => {
 
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
-    let cart = await Cart.findOne({ userId: user._id, productId: productId });
-    let profile = await Profile.findOne({ profileId: profile._id});
+
+    // Find the user's cart
+    let cart = await Cart.findOne({ userId: user._id });
 
     if (cart) {
-      cart.quantity += 1;
-      
+      // Check if the product is already in the cart
+      const existingProductIndex = cart.products.findIndex(p => p.productId.equals(productId));
+
+      if (existingProductIndex !== -1) {
+        // If the product is in the cart, increment its quantity
+        cart.products[existingProductIndex].quantity++;
+      } else {
+        // If the product is not in the cart, add it with quantity 1
+        cart.products.push({ productId, quantity: 1 });
+      }
     } else {
+      // If the user doesn't have a cart, create a new one
       cart = new Cart({
         userId: user._id,
-        productId: productId,
-        quantity: 1
+        products: [{ productId, quantity: 1 }],
       });
     }
+
     await cart.save();
     res.status(200).json({ success: true, message: 'Product added to cart' });
   } catch (error) {
@@ -83,8 +95,7 @@ router.post('/addToCart', async (req, res) => {
   }
 });
 
-///delete from cart
-
+// DELETE route to remove a product from the cart
 router.delete('/delete/:productId', async (req, res) => {
   const productId = req.params.productId;
   try {
@@ -92,11 +103,50 @@ router.delete('/delete/:productId', async (req, res) => {
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
 
-    await Cart.findOneAndDelete({ userId: user._id, productId });
-    res.status(200).json({ message: 'successfully deleted' });
+    await Cart.updateOne(
+      { userId: user._id },
+      { $pull: { products: { productId } } }
+    );
+
+    res.status(200).json({ message: 'Successfully deleted' });
   } catch (error) {
     console.error('Error deleting product from cart:', error);
-    res.status(500).json({ error: 'failed to delete' });
+    res.status(500).json({ error: 'Failed to delete' });
+  }
+});
+
+router.put('/:productId/:quantity', async (req, res) => {
+  try {
+    const productId = req.params.productId;
+    const quantity = parseInt(req.params.quantity);
+
+    const userToken = req.cookies.user_token;
+    let user = await User.findOne({ token: userToken });
+
+    // Find the user's cart
+    const cart = await Cart.findOne({ userId: user._id });
+
+    if (cart) {
+      // Find the product index in the cart
+      const productIndex = cart.products.findIndex(product => product.productId.toString() === productId);
+
+      if (productIndex !== -1) {
+        // Update the quantity for the specific product
+        cart.products[productIndex].quantity = quantity;
+
+        // Save the updated cart
+        await cart.save();
+
+        res.status(200).json({ success: true, message: 'Quantity updated in the database' });
+      } else {
+        res.status(404).json({ error: 'Product not found in the cart' });
+      }
+    } else {
+      res.status(404).json({ error: 'Cart not found for the user' });
+    }
+  } catch (error) {
+    console.error('Error updating quantity:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 

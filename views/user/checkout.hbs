@@ -539,6 +539,7 @@
         href="https://smarthome.fuelthemes.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fsmarthome.fuelthemes.net%2Fcheckout%2F" />
     <link rel="alternate" type="text/xml+oembed"
         href="https://smarthome.fuelthemes.net/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fsmarthome.fuelthemes.net%2Fcheckout%2F&#038;format=xml" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.10/dist/sweetalert2.min.css">
     <style>
         img#wpstats {
             display: none
@@ -764,7 +765,8 @@
 
 
                             </div>
-                            <form class="woocommerce-form woocommerce-form-login login" method="post" style="display:none;">
+                            <form class="woocommerce-form woocommerce-form-login login" method="post"
+                                style="display:none;">
 
 
                                 <p>If you have shopped with us before, please enter your details below. If you are a new
@@ -806,194 +808,65 @@
                                 <div class="clear"></div>
 
 
+                            </form>
+                            <div class="woocommerce-form-coupon-toggle">
+
+
+
+                                <form class="checkout_coupon woocommerce-form-coupon" method="post"
+                                    style="display:none">
+
+                                    <p>If you have a coupon code, please apply it below.</p>
+
+                                    <p class="form-row form-row-first">
+                                        <label for="coupon_code" class="screen-reader-text">Coupon:</label>
+                                        <input type="text" name="coupon_code" class="input-text"
+                                            placeholder="Coupon code" id="coupon_code" value="" />
+                                    </p>
+
+                                    <p class="form-row form-row-last">
+                                        <button type="submit" class="button wp-element-button" name="apply_coupon"
+                                            value="Apply coupon">Apply coupon</button>
+                                    </p>
+
+                                    <div class="clear"></div>
                                 </form>
-                                <div class="woocommerce-form-coupon-toggle">
-
-
-
-                                    <form class="checkout_coupon woocommerce-form-coupon" method="post"
-                                        style="display:none">
-
-                                        <p>If you have a coupon code, please apply it below.</p>
-
-                                        <p class="form-row form-row-first">
-                                            <label for="coupon_code" class="screen-reader-text">Coupon:</label>
-                                            <input type="text" name="coupon_code" class="input-text"
-                                                placeholder="Coupon code" id="coupon_code" value="" />
-                                        </p>
-
-                                        <p class="form-row form-row-last">
-                                            <button type="submit" class="button wp-element-button" name="apply_coupon"
-                                                value="Apply coupon">Apply coupon</button>
-                                        </p>
-
-                                        <div class="clear"></div>
-                                    </form>
-                                    <div class="woocommerce-notices-wrapper"></div>
-                                    <form name="checkout" action="/payment/placeorder" method="post"
-                                        class="checkout woocommerce-checkout"
-                                        action="https://smarthome.fuelthemes.net/checkout/"
-                                        enctype="multipart/form-data">
-
-                                        <div class="container">
-                                            <div class="row" style="display: flex;">
-                                                <div class="small-12 medium-7 columns thb-checkout-form-column">
-                                                    <div class="col2-set" id="customer_details">
-
-
-                                                        <!-- *********************************************************************************************************************************************************************** -->
-
-                                                        <h5>Select Delivery Address</h5>
-                                                        <button type="button" id="showAdminModalBtn"
-                                                            style="margin-left: 300px;" class="btn btn-primary"
-                                                            data-bs-toggle="modal" data-bs-target="#adminModal">
-                                                            ADD NEW ADDRESS
-                                                        </button>
-                                                    </div>
-                                                    <h6 class="mb-3">Defualt Address</h6>
-
-
-                                                    <div class="row">
-                                                        <div class="container">
-                                                            <div class="row">
-                                                                {{#each profile}}
-                                                                <div class="col-md-8 order-md-1 address-container"
-                                                                    data-profile-id="{{this.id}}">
-                                                                    <ul class="list-group">
-                                                                        <li class="list-group-item">
-                                                                            {{!-- <label> --}}
-                                                                                {{!-- </label> --}}
-                                                                            <h3> <span><input type="radio"
-                                                                                        name="defaultAddress"
-                                                                                        class="default-address-radio">
-                                                                                </span>{{this.name}}</h3>
-                                                                            <p>{{this.address}}</p>
-                                                                            <p>PinCode: {{this.pinCode}}</p>
-                                                                            <p>{{this.mobileNo}}</p>
-                                                                        </li>
-                                                                        <li class="list-group-item">
-                                                                            {{!-- <button type="button"
-                                                                                class="btn btn-danger removebtn">REMOVE</button>
-                                                                            --}}
-                                                                            <button type="button" id="removebtn"
-                                                                                onclick="deleteProfile('{{profile._id}}')">REMOVE</button>
-
-                                                                            <button id="editbtn">EDIT</button>
-
-                                                                        </li>
-                                                                    </ul>
-                                                                </div>
-                                                                {{/each}}
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-
-                                                    {{!-- <div id="addadress2">
-                                                        +ADD NEW ADDRESS
-                                                    </div> --}}
-                                                </div>
-                                            </div>
-                                        </div>
+                                <div class="woocommerce-notices-wrapper"></div>
 
 
 
 
-                                        <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
-                                            <div class="modal-dialog modal-dialog-centered" role="document">
-                                                <div class="modal-content">
-                                                    <div class="modal-header">
-                                                        <h5 class="modal-title" id="modalCenterTitle">ADD ADDRESS
-                                                        </h5>
-                                                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                            aria-label="Close"></button>
-                                                    </div>
-                                                    <div class="modal-body">
-                                                        <div class="row">
-                                                            <div class="col mb-3">
-                                                                <label for="adEmail" class="form-label">CONTACT
-                                                                    DETAILS</label>
-                                                                <input type="text" id="name" class="form-control"
-                                                                    placeholder="Name*" />
-                                                                <p></p>
-                                                                <input type="tel" id="mobileNo" class="form-control"
-                                                                    placeholder="Mobile No*" />
-                                                                <p></p>
-                                                                <input type="email" name="email" class="form-control"
-                                                                    id="email" placeholder="Email*" />
-                                                                <p></p>
-                                                            </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col mb-3">
-                                                                <label for="adminPassword" class="form-label">Pin
-                                                                    Code</label>
-                                                                <input type="number" id="pincode" class="form-control"
-                                                                    placeholder="Pin Code*" />
-                                                                <p></p>
-                                                                <label for="adminPassword"
-                                                                    class="form-label">ADDRESS</label>
-
-                                                                <input type="text" id="address" class="form-control"
-                                                                    placeholder="Address(House No, Building, Street, Area*" />
-                                                                <p></p>
-                                                                <input type="text" id="locality" class="form-control"
-                                                                    placeholder="Localiy/Town*" />
-                                                                <p></p>
-                                                                <div style="display: flex;">
-                                                                    <input type="text" id="city" class="form-control"
-                                                                        placeholder="City/ Dstrict*" />
-                                                                    <p></p>
-                                                                    <input type="text" id="state" class="form-control"
-                                                                        placeholder="State*" />
-                                                                    <p></p>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-
-                                                        <div class="row">
-                                                            <label for="adminPassword" class="form-label">Save
-                                                                Address As</label>
-                                                            <div style="display: flex;">
-                                                                <input
-                                                                    style="border-radius: 50px; width:75px ;color:black; hight:10px"
-                                                                    type="radio" id="home" class="form-control"
-                                                                    placeholder="Home" />
-                                                                <p></p>
-                                                                <input
-                                                                    style="border-radius: 50px;width:75px;color:black; hight:10px"
-                                                                    type="radio" id="work" class="form-control"
-                                                                    placeholder="work*" />
-                                                                <p></p>
-                                                            </div>
-                                                        </div>
-
-                                                        <input type="checkbox" name="" id=""> Make this my deffualt
-                                                        address
-                                                        {{!-- <div class="row">
-                                                            <div class="col mb-3">
-                                                                <label for="adminRePassword" class="form-label">Confirm
-                                                                    Password</label>
-                                                                <input type="password" id="adminRePassword"
-                                                                    class="form-control"
-                                                                    placeholder="Confirm Password" />
-                                                            </div>
-                                                        </div> --}}
-                                                    </div>
-                                                    <div class="modal-footer">
-                                                        <button type="button" class="btn btn-outline-secondary"
-                                                            data-bs-dismiss="modal">Close</button>
-                                                        <button id="submitAddressBtn" class="btn btn-primary">Add
-                                                            Address</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
 
 
-                                </div>
+                            </div>
+
+                            <form action="/payment/placeorder" method="post">
                                 <div class="small-12 medium-5 columns thb-order-review-column">
+                                    Address <span><a href="/users/profile">add adress</a></span>
+                                    {{#each profile}}
+                                    <ul class="wc_payment_methods payment_methods methods">
+                                        <li class="wc_payment_method payment_method_bacs">
+                                            <input id="payment_method_bacs" type="radio" class="input-radio"
+                                                name="adress_method" value="{{this._id}}" checked='checked'
+                                                data-order_button_text="" />
 
+
+                                            <label for="payment_method_bacs">
+                                                {{this.name}} </label>
+                                            <div class="payment_box payment_method_bacs">
+                                                <p>{{this.address}}</p>
+                                                <p>{{this.email}}</p>
+                                                <p>{{this.locality}}</p>
+                                                <p>{{this.city}}</p>
+                                                                                                <p>{{this.address}}</p>
+                                                <p>{{this.state}}</p>
+                                                <p>{{this.pinCode}}</p>
+
+                                            </div>
+                                        </li>
+
+                                    </ul>
+                                    {{/each}}
 
                                     <h3 id="order_review_heading">Your order</h3>
 
@@ -1004,68 +877,60 @@
                                             <thead>
                                                 <tr>
                                                     <th class="product-name">Product</th>
-                                                    <th class="product-total">Subtotal</th>
+                                                    <th class="product-total">amount</th>
+                                                    <th class="product-total">total</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                {{#each product}}
+                                                {{#each cart}}
                                                 <tr class="cart_item">
                                                     <td class="product-name">
-                                                        {{this.productName}}&nbsp; <strong
-                                                            class="product-quantity">&times;&nbsp;1</strong>
+                                                        {{this.productData.productName}}&nbsp; <strong
+                                                            class="product-quantity">&times;&nbsp;{{this._doc.quantity}}</strong>
                                                     </td>
                                                     <td class="product-total">
-                                                        <span class="woocommerce-Price-amount amount"><bdi><span
-                                                                    class="woocommerce-Price-currencySymbol">₹</span>{{this.productPrice}}</bdi></span>
+                                                        <span class="woocommerce-Price-amount amount product-price">
+                                                            <bdi><span
+                                                                    class="woocommerce-Price-currencySymbol"></span>{{this.productData.productPrice}}</bdi>
+                                                        </span>
+                                                    </td>
+                                                    <td class="total">
+                                                        <span class="woocommerce-Price-amount amount product-price">
+                                                            <bdi><span
+                                                                    class="woocommerce-Price-currencySymbol"></span>{{this.total}}</bdi>
+                                                        </span>
                                                     </td>
                                                 </tr>
                                                 {{/each}}
                                             </tbody>
-                                            <tfoot>
 
+
+
+
+                                            <tfoot>
+                                                {{!--
                                                 <tr class="cart-subtotal">
                                                     <th>Subtotal</th>
                                                     <td><span class="woocommerce-Price-amount amount"><bdi><span
                                                                     class="woocommerce-Price-currencySymbol">₹</span>36.20</bdi></span>
                                                     </td>
                                                 </tr>
+                                                --}}
 
 
 
 
-                                                <tr class="woocommerce-shipping-totals shipping">
-                                                    <th>Shipping</th>
-                                                    <td data-title="Shipping">
-                                                        <ul id="shipping_method" class="woocommerce-shipping-methods">
-                                                            <li>
-                                                                <input type="hidden" name="shipping_method[0]"
-                                                                    data-index="0" id="shipping_method_0_flat_rate2"
-                                                                    value="flat_rate:2" class="shipping_method" /><label
-                                                                    for="shipping_method_0_flat_rate2">Flat
-                                                                    rate: <span
-                                                                        class="woocommerce-Price-amount amount"><bdi><span
-                                                                                class="woocommerce-Price-currencySymbol">₹</span>100.00</bdi></span></label>
-                                                            </li>
-                                                        </ul>
-
-
-                                                    </td>
-                                                </tr>
-
-                                                <tr class="tax-total">
-                                                    <th>Tax</th>
-                                                    <td><span class="woocommerce-Price-amount amount"><bdi><span
-                                                                    class="woocommerce-Price-currencySymbol">₹</span></bdi></span>
-                                                    </td>
-                                                </tr>
 
 
                                                 <tr class="order-total">
                                                     <th>Total</th>
-                                                    <td><strong><span class="woocommerce-Price-amount amount"><bdi><span
-                                                                        class="woocommerce-Price-currencySymbol">₹</span></bdi></span></strong>
+                                                    <td></td>
+                                                    <td><strong><span class="woocommerce-Price-amount amount"><bdi
+                                                                    id="ok"><span
+                                                                        class="woocommerce-Price-currencySymbol">₹</span>{{grandTotal}}</bdi></span></strong>
                                                     </td>
                                                 </tr>
+                                                <input type="text" id="okk" style="display: none;" name="amount" />
 
 
                                             </tfoot>
@@ -1124,13 +989,12 @@
                                                 </div>
 
 
-                                                <a href="/orderplaced"><button type="submit"
-                                                        class="button alt wp-element-button"
+                                                <a><button type="submit" class="button alt wp-element-button"
                                                         name="woocommerce_checkout_place_order" id="place_order_link"
                                                         id="place_order" value="Place order"
                                                         data-value="Place order">Place
                                                         order</button></a>
-                                                        
+
                                                 {{!-- <a href="#" id="place_order_link" data-value="Place order">Place
                                                     order</a> --}}
 
@@ -1143,6 +1007,7 @@
                                     </div>
 
                                 </div>
+                            </form>
                         </div>
                     </div>
                     </form>
@@ -1153,22 +1018,161 @@
     </div>
     </div>
     </div>
-
+    {{#each cart}}
+    <p id="cartt" style="display: none;">{{this.$__parent._id}}</p>
+    <!-- Other properties of the cart item can be accessed similarly -->
+    {{/each}}
+    <p id="non" style="display: none;">{{user._id}}</p>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.10/dist/sweetalert2.all.min.js"></script>
     <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 
     <script>
-        async function payNow(orderId, amount){
-            try {
-                const response = await fetch('/create-razorpay-order',`-`
-               {
+        document.addEventListener('DOMContentLoaded', function () {
+            // Function to handle form submission
+            function handleFormSubmission(event) {
+                event.preventDefault();
+
+                // Collect only specific fields from the form
+                var amount = document.querySelector('#okk').value;
+                var payment_method = document.querySelector('input[name="payment_method"]:checked').value;
+                var adress_method = document.querySelector('input[name="adress_method"]:checked').value;
+                var user = document.querySelector('#non').textContent
+                var cart = document.querySelector('#cartt').textContent
+
+                // Create an object with the selected data
+                var formData = {
+                    amount,
+                    payment_method,
+                    userId: user,
+                    cartId: cart,
+                    profileId: adress_method
+                };
+
+                // Fetch options
+                var fetchOptions = {
                     method: 'POST',
+                    body: JSON.stringify(formData),
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({
-                        amount: amount,
-                    }),
+                };
+
+                // Fetch the endpoint
+                fetch('/payment/placeorder', fetchOptions)
+                    .then(response => response.json())
+                    .then(data => {
+                        // Handle the JSON response
+                        if (data.razorpayOptions) {
+                            alert(data.razorpayOptions)
+                            const razorpay = new Razorpay({
+                                ...data.razorpayOptions,
+                                handler: async function (response) {
+                                    if (response.razorpay_payment_id) {
+                                        try {
+                                            var amount = document.querySelector('#okk').value;
+                                            var payment_method = document.querySelector('input[name="payment_method"]:checked').value;
+                                            var adress_method = document.querySelector('input[name="adress_method"]:checked').value;
+                                            var user = document.querySelector('#non').textContent
+                                            var cart = document.querySelector('#cartt').textContent
+
+                                            // Create an object with the selected data
+                                            var formData = {
+                                                amount,
+                                                payment_method,
+                                                userId: user,
+                                                cartId: cart,
+                                                profileId: adress_method,
+                                                paymentId: paymentId
+                                            };
+                                            const updateResponse = await fetch('/payment/placeorder', {
+                                                method: 'POST',
+                                                headers: {
+                                                    'Content-Type': 'application/json',
+                                                },
+                                                body: JSON.stringify(formData),
+                                            });
+
+                                            if (!updateResponse.ok) {
+                                                console.error('Failed to update payment status:', updateResponse.statusText);
+                                                return;
+                                            }
+                                        } catch (e) {
+                                            console.error('Failed to update payment status:', e);
+                                        }
+
+                                        // Additional logic for successful payment
+                                        window.location.reload();
+                                    } else {
+                                        console.error('Payment failed:', response.error_description);
+                                        alert('Payment failed. Please try again.');
+                                    }
+                                },
+                            });
+                            razorpay.open();
+                        } else if (data.ok) {
+                            showSweetAlert('success', 'Cash On Delivery', 'Order Placed', '/myorders');
+                        }
+                        // Handle other response data or actions as needed
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        // Handle errors
+                    });
+            }
+
+            // Attach an event listener to the form
+            var orderForm = document.querySelector('form[action="/payment/placeorder"]');
+            if (orderForm) {
+                orderForm.addEventListener('submit', handleFormSubmission);
+            }
+        });
+        // Function to show SweetAlert
+        function showSweetAlert(icon, tt, text, location) {
+            Swal.fire({
+                icon: icon,
+                title: tt,
+                text: text,
+            }).then(() => {
+                window.location = location
+            })
+        }
+        function saveOrder() {
+            // Perform another fetch request to save the order
+            fetch('/saveorder', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // Include any additional data needed to save the order
+                // For example, you might include order details in the body
+                body: JSON.stringify({ /* order details */ }),
+            })
+                .then(response => response.json())
+                .then(data => {
+                    // Handle the JSON response or perform any other actions
+                    console.log('Order saved:', data);
+                })
+                .catch(error => {
+                    console.error('Error saving order:', error);
                 });
+        }
+    </script>
+
+
+
+    <script>
+        async function payNow(orderId, amount) {
+            try {
+                const response = await fetch('/create-razorpay-order', `-`
+               {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            amount: amount,
+                        }),
+                    });
 
                 if (!response.ok) {
                     console.error('Failed to create Razorpay order:', response.statusText);

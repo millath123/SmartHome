@@ -143,22 +143,22 @@
 
             </div>
             <h6 class="mb-3">Defualt Address</h6>
-            {{#if profile}}
+            {{#each profile}}
             <div class="col-md-8 order-md-1" id="defaultAddress" style="  background-color:white;">
                 <form class="needs-validation" novalidate>
                     <div class="row" style="display: flex;">
                         <div class="col-md-6 mb-3">
-                            <h3>{{profile.name}}</h3>
-                            <p>{{profile.address}}</p>
-                            <p>PinCode:{{profile.pinCode}}</p>
-                            <p>{{profile.mobileNo}}</p>
-                    <button type="button" id="removebtn" onclick="deleteProfile('{{profile._id}}')">REMOVE</button>
+                            <h3>{{this.name}}</h3>
+                            <p>{{this.address}}</p>
+                            <p>PinCode:{{this.pinCode}}</p>
+                            <p>{{this.mobileNo}}</p>
+                    <button type="button" id="removebtn" onclick="deleteProfile('{{this._id}}')">REMOVE</button>
                             <button id="editbtn">EDIT</button>
                         </div>
                     </div>
                 </form>
             </div>
-            {{/if}}
+            {{/each}}
         </div>
 
         {{!-- <div id="addadress2">
@@ -178,8 +178,6 @@
     </form>
     </div>
     </div>
-
-
 
     <div class="modal fade" id="adminModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -422,8 +420,8 @@
 
     if (editBtn && editModal && saveEditBtn) {
         editBtn.addEventListener('click', () => {
-          
             const currentName = document.querySelector('#defaultAddress h3').textContent;
+            alert(currentName)
             editNameInput.value = currentName;
               editMobileNoInput.value = currentMobileNo;
             editEmailInput.value = currentEmail;

@@ -15,17 +15,33 @@ const Profile = require('../model/profile');
 
 router.use(express.json());
 
+
 router.get('/', async (req, res) => {
-  const userToken = req.cookies.user_token;
-  let user = await User.findOne({ token: userToken });
-  console.log(user);
+  try {
+    const userToken = req.cookies.user_token;
+    let user = await User.findOne({ token: userToken });
 
-  const cartItems = await Cart.find({ userId: user._id });
+    if (!user) {
+      return res.status(404).send('User not found');
+    }
 
-  const productIds = cartItems.map(item => item.productId);
-  const productData = await Product.find({ _id: productIds });
-  res.render(path.join(__dirname, '../views/user/index'), { cart: cartItems, product: productData })
+    const cartItems = await Cart.findOne({ userId: user._id });
+
+    if (!cartItems) {
+      return res.status(200).render(path.join(__dirname, '../views/user/index'), { cart: [], product: [] });
+    }
+
+    const productIds = cartItems.products.map(product => product.productId);
+
+    const productData = await Product.find({ _id: { $in: productIds } });
+
+    res.render(path.join(__dirname, '../views/user/index'), { cart: cartItems.products, product: productData });
+  } catch (error) {
+    console.error('Error:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
+
 
 
 /* GETusers listing. */
@@ -219,7 +235,7 @@ router.get('/profile', async (req, res) => {
   const userToken = req.cookies.user_token;
   let user = await User.findOne({ token: userToken });
 
-  const profile = await Profile.findOne({ userId: user._id });
+  const profile = await Profile.find({ userId: user._id });
   console.log(profile);
 
   res.render(path.join(__dirname, '../views/user/profile'), { profile })

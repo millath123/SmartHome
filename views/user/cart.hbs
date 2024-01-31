@@ -191,6 +191,7 @@
             background-position-x: 95%;
             background-position-y: center;
         }
+
         .qty {
             display: flex;
             align-items: center;
@@ -222,7 +223,7 @@
 </head>
 
 <body>
-    
+
     <div class="card">
         <div class="row">
             <div class="col-md-8 cart">
@@ -230,41 +231,38 @@
                     <div class="col">
                         <h4><b>Shopping Cart</b></h4>
                     </div>
-                    {{#each cart}}
-                    <div class="row">
-                        <div class="col align-self-center text-right text-muted"></div>
-                    </div>{{/each}}
                 </div>
 
-                {{#each product}}
-                <div class="row border-top border-bottom">
-                    <div class="row main align-items-center">
-                        <div class="col-2"><img class="img-fluid" src="{{this.productImage.[0]}}"></div>
-                        <div class="col">
-                            <div class="row text-muted">{{this.productCategory}}</div>
-                            <div class="row">{{this.productName}}</div>
-                        </div>
-                        <div class="qty">
-                            <a href="#" class="decrement">-</a>
-                            <span class="quantity">1</span>
-                            <a href="#" class="increment">+</a>
-                        </div>
+{{#each cartItems.[0].products}}
+  <div class="row border-top border-bottom">
+    <div class="row main align-items-center">
+      <div class="col-2"><img class="img-fluid" src="{{this.productData.productImage.[0]}}"></div>
+      <div class="col">
+        <div class="row text-muted">{{this.productData.productCategory}}</div>
+        <div class="row">{{this.productData.productName}}</div>
+      </div>
+      <div class="qty">
+        <a href="#" class="decrement">-</a>
+        <span class="quantity">{{this.quantity}}</span>
+        <a href="#" class="increment">+</a>
+      </div>
 
-                        <div class="col">₹<span class="product-price">{{this.productPrice}}</span>
-                            <span class="close">
-                                <button class="btn-delete" data-productId="{{this._id}}">&#10005;</button>
-                            </span>
-                        </div>
+      <div class="col">₹<span class="product-price">{{this.productData.productPrice}}</span>
+        <span class="close">
+          <button class="btn-delete" data-productId="{{this.productId}}">&#10005;</button>
+        </span>
+      </div>
 
-                        <p class="deletcart" style="display:                                                                                                                                                                                                         ;">{{this._id}}</p>
-                    </div>
-                </div>
+      <p class="deletcart" style="display: none;">{{this.productId}}</p>
+    </div>
+  </div>
+{{/each}}
 
-                {{/each}}
 
                 <div class="back-to-shop"><a href="/product">&leftarrow;</a><span class="text-muted">Back to shop</span>
                 </div>
             </div>
+
             <div class="col-md-4 summary">
                 <div>
                     <h5><b>Summary</b></h5>
@@ -272,25 +270,19 @@
                 <hr>
 
                 <div class="row">
-                    <div class="col" style="padding-left:0;" id="totalItems">ITEMS 3</div>
-                    {{!-- <div class="col text-right" id="totalSum"></div> --}}
+                    <div class="col" style="padding-left:0;" id="totalItems">ITEMS {{cartItems.[0].productData.length}}</div>
                 </div>
-                {{!-- <form>
-                    <p>SHIPPING</p>
-                    <select>
-                        <option class="text-muted">Standard-Delivery- </option>
-                    </select>
-                    <p>GIVE CODE</p>
-                    <input id="code" placeholder="Enter your code">
-                </form> --}}
+
                 <div class="row" style="border-top: 1px solid rgba(0,0,0,.1); padding: 2vh 0;">
                     <div class="col">TOTAL PRICE</div>
                     <div class="col text-right" id="totalSum"></div>
                 </div>
+
                 <a href="/checkout"><button id="checkout" class="btn">CHECKOUT</button></a>
             </div>
         </div>
     </div>
+
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -319,42 +311,75 @@
         });
     </script>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const qtyContainers = document.querySelectorAll('.qty');
-            qtyContainers.forEach(container => {
-                const decrementButton = container.querySelector('.decrement');
-                const incrementButton = container.querySelector('.increment');
-                const quantityElement = container.querySelector('.quantity');
-                const productPriceElement = container.closest('.row').querySelector('.product-price');
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const qtyContainers = document.querySelectorAll('.qty');
+        qtyContainers.forEach(container => {
+            const decrementButton = container.querySelector('.decrement');
+            const incrementButton = container.querySelector('.increment');
+            const quantityElement = container.querySelector('.quantity');
+            const productPriceElement = container.closest('.row').querySelector('.product-price');
+            const productId = container.closest('.row').querySelector('.btn-delete').getAttribute('data-productId');
 
-                const originalPrice = parseFloat(productPriceElement.textContent);
+            const originalPrice = parseFloat(productPriceElement.textContent);
 
-                incrementButton.addEventListener('click', () => {
-                    let quantity = parseInt(quantityElement.textContent);
-                    if (quantity < 10) {
-                        quantity++;
-                        quantityElement.textContent = quantity;
+            // Get the default quantity from the template
+            let defaultQuantity = parseInt(quantityElement.textContent);
 
-                        const totalPrice = originalPrice * quantity;
-                        productPriceElement.textContent = totalPrice;
-                    }
-                });
-
-                decrementButton.addEventListener('click', () => {
-                    let quantity = parseInt(quantityElement.textContent);
-                    if (quantity > 1) {
-                        quantity--;
-                        quantityElement.textContent = quantity;
-
-                        const totalPrice = originalPrice * quantity;
-                        productPriceElement.textContent = totalPrice;
-                    }
-                });
+            incrementButton.addEventListener('click', () => {
+                updateQuantity('increment');
             });
-        });
-    </script>
 
+            decrementButton.addEventListener('click', () => {
+                updateQuantity('decrement');
+            });
+
+            function updateQuantity(action) {
+                let quantity = parseInt(quantityElement.textContent);
+
+                if (action === 'increment' && quantity < 10) {
+                    quantity++;
+                } else if (action === 'decrement' && quantity > 1) {
+                    quantity--;
+                }
+
+                quantityElement.textContent = quantity;
+
+                const totalPrice = originalPrice * quantity;
+                productPriceElement.textContent = totalPrice;
+
+                // Send AJAX request to update quantity in the database
+                updateQuantityInDatabase(productId, quantity);
+            }
+
+            // Trigger the increment logic based on the default quantity
+            for (let i = 1; i < defaultQuantity; i++) {
+                incrementButton.click();
+                decrementButton.click()
+            }
+        });
+
+        function updateQuantityInDatabase(productId, quantity) {
+            // Send an AJAX request to update quantity in the database
+            fetch(`/cart/${productId}/${quantity}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // You can include additional data in the body if needed
+                // body: JSON.stringify({ quantity: quantity }),
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Failed to update quantity in the database');
+                }
+            })
+            .catch(error => {
+                console.error(error);
+            });
+        }
+    });
+</script>
 
     {{!-- sum of the product price --}}
     <script>
@@ -380,7 +405,7 @@
         document.addEventListener('DOMContentLoaded', () => {
             const updateTotalItems = () => {
                 const cartItems = document.querySelectorAll('.row.main');
-                const totalItemsElement 
+                const totalItemsElement
                 + document.getElementById('totalItems');
 
                 const totalItems = cartItems.length;
@@ -393,4 +418,5 @@
     </script>
 
 </body>
+
 </html>

@@ -17,8 +17,12 @@ const orderplacedSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:'product',
     },
-    paymentMethod:String,
-    orderId:String
+    payment_method:String,
+    orderId:String,
+    amount:Number,
+    orderDate:Date,
+    products:Array,
+    paymentId:String
 });
 
 

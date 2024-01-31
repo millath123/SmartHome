@@ -12,17 +12,17 @@ require('dotenv').config();
 
 // Rewgistration of admin
 
-// router.get('/register', async (req, res) => {
-//   const adminEmail = process.env.ADMIN_EMAIL;
-//   const adminPassword = process.env.ADMIN_PASSWORD;
-//   const hashedPassword = await bcrypt.hash(adminPassword, 10);
+router.get('/register', async (req, res) => {
+  const adminEmail = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+  const hashedPassword = await bcrypt.hash(adminPassword, 10);
 
-//     const newAdmin = new Admin({
-//       email:adminEmail,
-//       password: hashedPassword
-//     });
-//     await newAdmin.save();
-// });
+    const newAdmin = new Admin({
+      email:adminEmail,
+      password: hashedPassword
+    });
+    await newAdmin.save();
+});
 
 
 router.get('/login', isAuthenticated, function (req, res) {
