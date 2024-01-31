@@ -617,6 +617,27 @@
             color: #20BD99;
             ;
         }
+
+        #addaddrs {
+            background-color: #007bff;
+            color: #f9fbfe;
+            /* Blue color for the link */
+            text-decoration: none;
+            /* Remove underline */
+            font-size: 16px;
+            /* Font size */
+            font-family: Arial, sans-serif;
+            /* Font family */
+            text-decoration: none;
+            /* Underline on hover */
+
+        }
+
+        /* Hover style for the link */
+        a:hover {
+            text-decoration: none;
+            /* Underline on hover */
+        }
     </style>
 
 
@@ -858,10 +879,9 @@
                                                 <p>{{this.email}}</p>
                                                 <p>{{this.locality}}</p>
                                                 <p>{{this.city}}</p>
-                                                                                                <p>{{this.address}}</p>
+                                                <p>{{this.address}}</p>
                                                 <p>{{this.state}}</p>
                                                 <p>{{this.pinCode}}</p>
-
                                             </div>
                                         </li>
 
@@ -1063,14 +1083,14 @@
                     .then(data => {
                         // Handle the JSON response
                         if (data.razorpayOptions) {
-                            alert(data.razorpayOptions)
+                            { { !--alert(data.razorpayOptions) --} }
                             const razorpay = new Razorpay({
                                 ...data.razorpayOptions,
                                 handler: async function (response) {
                                     if (response.razorpay_payment_id) {
                                         try {
                                             var amount = document.querySelector('#okk').value;
-                                            var payment_method = document.querySelector('input[name="payment_method"]:checked').value;
+                                            var payment_method = 'Razor pay'
                                             var adress_method = document.querySelector('input[name="adress_method"]:checked').value;
                                             var user = document.querySelector('#non').textContent
                                             var cart = document.querySelector('#cartt').textContent
@@ -1082,7 +1102,7 @@
                                                 userId: user,
                                                 cartId: cart,
                                                 profileId: adress_method,
-                                                paymentId: paymentId
+                                                paymentId: response.razorpay_payment_id
                                             };
                                             const updateResponse = await fetch('/payment/placeorder', {
                                                 method: 'POST',
