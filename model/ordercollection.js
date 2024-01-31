@@ -25,7 +25,6 @@ const orderplacedSchema = new mongoose.Schema({
     paymentId:String
 });
 
-
 const Order = mongoose.model('Order', orderplacedSchema);
 module.exports = Order;
 
