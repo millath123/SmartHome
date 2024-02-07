@@ -9,7 +9,7 @@ const User = require('../model/usermodel');
 
 router.get('/',async function(req, res, next) {
 
-  res.render(path.join(__dirname,'../views/admin/login'));
+  res.render(path.join(__dirname,'../views/user/index'));
 });
 
 router.get('/product',async function (req, res, next) {
@@ -20,13 +20,10 @@ router.get('/product',async function (req, res, next) {
 
   // const productIds = cartItems.map(item => item.productId);
   // const productData = await Product.find({ _id: productIds });
-  const product = await Product.find()
+const product = await Product.find()
 
   res.render(path.join(__dirname,'../views/user/product'), {product });
 });
-
-
-
 
 
 module.exports = router;

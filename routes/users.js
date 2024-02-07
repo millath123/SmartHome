@@ -45,10 +45,11 @@ router.get('/', async (req, res) => {
 
 
 /* GETusers listing. */
-router.get('/register', function (req, res, next) {
-  res.render(path.join(__dirname, '../views/user/register'))
-});
 
+
+router.get('/register', async (req, res, next) => {
+  res.render(path.join(__dirname, '../views/user/register'));
+});
 
 
 router.post('/send-otp', async (req, res) => {
@@ -121,7 +122,7 @@ router.get('/active/:otp', async (req, res) => {
 
 //  set password and conform for reg
 
-router.get('/conformreg', (req, res) => {
+router.get('/conformreg', async(req, res) => {
   res.render('users/setpassword');
 });
 
@@ -197,7 +198,7 @@ router.post('/login', async (req, res) => {
 
 ////mobail OTP
 
-router.get('/mobileotp', (req, res) => {
+router.get('/mobileotp', async (req, res) => {
   res.render(path.join(__dirname, '../views/user/mobileOTP'))
 });
 
@@ -314,7 +315,7 @@ router.put('/profile/:profileId', async (req, res) => {
 });
 
 
-router.put('/profile')
+// router.put('/profile')
 
 // Fetch user profile details by email
 // router.get('/profile/:email', async (req, res) => {
@@ -333,6 +334,9 @@ router.put('/profile')
 //     res.status(500).send('Error fetching user profile');
 //   }
 // });
+
+
+
 
 module.exports = router;
 

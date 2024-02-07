@@ -51,6 +51,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
+
 // POST route to add a product to the cart
 router.post('/addToCart', async (req, res) => {
   const productId = req.body.productId;
@@ -65,22 +66,20 @@ router.post('/addToCart', async (req, res) => {
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
 
-    // Find the user's cart
+    
     let cart = await Cart.findOne({ userId: user._id });
 
     if (cart) {
-      // Check if the product is already in the cart
+      
       const existingProductIndex = cart.products.findIndex(p => p.productId.equals(productId));
 
       if (existingProductIndex !== -1) {
-        // If the product is in the cart, increment its quantity
         cart.products[existingProductIndex].quantity++;
       } else {
-        // If the product is not in the cart, add it with quantity 1
         cart.products.push({ productId, quantity: 1 });
       }
-    } else {
-      // If the user doesn't have a cart, create a new one
+    }
+     else {
       cart = new Cart({
         userId: user._id,
         products: [{ productId, quantity: 1 }],
@@ -95,7 +94,7 @@ router.post('/addToCart', async (req, res) => {
   }
 });
 
-// DELETE route to remove a product from the cart
+
 router.delete('/delete/:productId', async (req, res) => {
   const productId = req.params.productId;
   try {
@@ -123,18 +122,14 @@ router.put('/:productId/:quantity', async (req, res) => {
     const userToken = req.cookies.user_token;
     let user = await User.findOne({ token: userToken });
 
-    // Find the user's cart
     const cart = await Cart.findOne({ userId: user._id });
 
     if (cart) {
-      // Find the product index in the cart
       const productIndex = cart.products.findIndex(product => product.productId.toString() === productId);
 
       if (productIndex !== -1) {
-        // Update the quantity for the specific product
         cart.products[productIndex].quantity = quantity;
 
-        // Save the updated cart
         await cart.save();
 
         res.status(200).json({ success: true, message: 'Quantity updated in the database' });
